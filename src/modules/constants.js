@@ -28,7 +28,7 @@ const SIZE_FIELD = {
     HEIGHT: 20
 };
 
-const LINE_PIXELS_IN_SQUARE = 20;
+const LINE_PIXELS_IN_SQUARE = 24;
 
 module.exports = {
     TETROMINOS: TETROMINOS,

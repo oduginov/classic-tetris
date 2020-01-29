@@ -51,6 +51,8 @@ section {
 
 .control-panel {
   display: flex;
+  justify-content: space-between;
+  width: 75px;
   margin-top: 375px;
   cursor: pointer;
 }

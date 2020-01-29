@@ -1,10 +1,13 @@
 const constants = require("./constants");
+const utils = require("./utils");
 
 /* Declare and initialize variables for work with the canvas */
 
 const canvas = document.getElementById("canvas");
-canvas.width = constants.SIZE_FIELD.WIDTH * constants.LINE_PIXELS_IN_SQUARE;
-canvas.height = constants.SIZE_FIELD.HEIGHT * constants.LINE_PIXELS_IN_SQUARE;
+const cols = constants.SIZE_FIELD.WIDTH * constants.LINE_PIXELS_IN_SQUARE;
+const rows = constants.SIZE_FIELD.HEIGHT * constants.LINE_PIXELS_IN_SQUARE;
+canvas.width = cols;
+canvas.height = rows;
 
 const context = canvas.getContext("2d");
 
@@ -24,7 +27,14 @@ function paintRect(x1, y1, x2, y2, color) {
     context.fillRect(x1, y1, Math.abs(x2 - x1 + 1), Math.abs(y2 - y1 + 1));
 }
 
+function getColor(x, y) {
+    const color = Array.from(context.getImageData(x, y, 1, 1).data);
+    return utils.rgbaToHex(color);
+}
+
 module.exports = {
+    canvasSize: {rows, cols},
     drawPixel: drawPixel,
-    paintRect: paintRect
+    paintRect: paintRect,
+    getColor: getColor,
 };

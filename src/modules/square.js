@@ -9,7 +9,7 @@ const canvas = require("./canvas");
  * @param {Number} x - The first coordinate of the square on the game field. We have
  * the following restriction: 0 <= x <= constants.SIZE_FIELD.WIDTH.
  * @param {Number} y - The second coordinate of the square on the game field. Feasible
- * values of the variable y is defined as follows: 0 <= y <= constants.SIZE_FIELD.HEIGHT.
+ * values of the variable y are defined as follows: 0 <= y <= constants.SIZE_FIELD.HEIGHT.
  * @param {Boolean} isFullFilled -
  * @param {String} innerColor - The main color for the body of a square in the hex code
  * @param {String[]} borderColors - The border colors for the body of a square in the hex code
@@ -43,6 +43,10 @@ const paintSquare = function (x, y, innerColor, borderColors, isFullFilled) {
     canvas.paintRect(x1, y1, x1 + eps, y1 + eps, innerColor);
 };
 
+/**
+ * Model square of a tetromino.
+ * @type {{paintSquare: *}}
+ */
 module.exports = {
     paintSquare: paintSquare,
 };
