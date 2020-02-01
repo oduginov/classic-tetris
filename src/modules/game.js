@@ -9,7 +9,6 @@ const tetrominoT = require("./tetromino-t");
 const tetromino = require("./tetromino");
 
 let currentTetramino = null;
-let type = 0;
 
 /*
  * Define variables
@@ -19,8 +18,7 @@ const speed = 5; // squares per <scale> seconds
 const delay = scale / speed; // sec after which a figure drops by one square below
 
 function obtainNewTetramino() {
-    type = Math.round(Math.random() * 2);
-    switch (type) {
+    switch (Math.round(Math.random() * 2)) {
         case constants.TETROMINOS.I:
             currentTetramino = tetrominoI;
             break;
@@ -40,7 +38,7 @@ function obtainNewTetramino() {
 function run() {
     init();
     obtainNewTetramino();
-    let prevTimestamp = Date.now();
+    let prevTimestamp = Date.now(); // milliseconds
 
     const repaint = () => {
         const elapsed = Date.now() - prevTimestamp; // milliseconds
