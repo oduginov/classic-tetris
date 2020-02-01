@@ -1,5 +1,5 @@
 const constants = require("./constants");
-const drop = require("./drop");
+const game = require("./game");
 const tetromino = require("./tetromino");
 const tetrominoI = require("./tetromino-i");
 const tetrominoO = require("./tetromino-o");
@@ -7,7 +7,7 @@ const tetrominoT = require("./tetromino-t");
 
 function addEventListeners() {
     document.addEventListener("keydown", (event) => {
-        if (drop.type === constants.TETROMINOS.I) {
+        if (game.type === constants.TETROMINOS.I) {
             if (event.code === "ArrowLeft") {
                 tetromino.moveLeft(tetrominoI);
             }
@@ -18,7 +18,7 @@ function addEventListeners() {
                 tetrominoI.rotate();
             }
         }
-        if(drop.type === constants.TETROMINOS.O) {
+        if(game.type === constants.TETROMINOS.O) {
             if (event.code === "ArrowLeft") {
                 tetromino.moveLeft(tetrominoO);
             }
@@ -26,7 +26,7 @@ function addEventListeners() {
                 tetromino.moveRight(tetrominoO);
             }
         }
-        if(drop.type === constants.TETROMINOS.T) {
+        if(game.type === constants.TETROMINOS.T) {
             if (event.code === "ArrowLeft") {
                 tetromino.moveLeft(tetrominoT);
             }
@@ -45,7 +45,7 @@ function addEventListeners() {
  */
 function startGame() {
     addEventListeners();
-    drop.run();
+    game.run();
 }
 
 module.exports = {

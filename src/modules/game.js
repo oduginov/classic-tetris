@@ -11,23 +11,18 @@ const tetrominoT = require("./tetromino-t");
  * Define variables
  */
 const scale = 1; // seconds
-const speed = 5; // squares per <scale> sec
+const speed = 5; // squares per <scale> seconds
 const delay = scale / speed; // sec after which a figure drops by one square below
 
 function init() {
-    let currentTetromino;
     switch (this.type) {
         case constants.TETROMINOS.I:
-            currentTetromino = tetrominoI;
-            break;
+            return tetrominoI;
         case constants.TETROMINOS.O:
-            currentTetromino = tetrominoO;
-            break;
+            return tetrominoO;
         case constants.TETROMINOS.T:
-            currentTetromino = tetrominoT;
-            break;
+            return tetrominoT;
     }
-    return currentTetromino;
 }
 
 function getRandomTetrominoType(n) {
@@ -57,12 +52,11 @@ function run() {
                 this.data = this.init();
                 this.gameBoard.draw(this.data.squares, this.data.innerColor, this.data.borderColors, false);
 
-                window.requestAnimationFrame(repaint);
+                requestAnimationFrame(repaint);
             }
         }
         requestAnimationFrame(repaint);
     };
-
     requestAnimationFrame(repaint);
 }
 

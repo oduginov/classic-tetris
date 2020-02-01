@@ -7,16 +7,18 @@ const TETROMINOS = {I: 0, O: 1, T: 2, J: 3, L: 4, S: 5, Z: 6};
 
 /**
  * Define increments of the score. According to the rule
- * the classic tetris, we increment the score by 40 points, if the
- * destroyed horizontal lines are at most 3, and by 80 points, if
- * we have the tetris, i.e. the number of the destroyed lines equals
- * to 4.
+ * the classic tetris, we increment the score by 40, 100, 300 points, if the
+ * number of the destroyed horizontal lines is exactly 1,2 and 3, respectively,
+ * and by 1200 points, if we have the tetris, i.e. the number of the destroyed lines
+ * equals to 4.
  *
  * @type {{TETRIS_INCREMENT: number, SIMPLE_INCREMENT: number}}
  */
 const SCORE_INCREMENTS = {
-    SIMPLE_INCREMENT: 40,
-    TETRIS_INCREMENT: 80
+    ONE_LINE_INCREMENT: 40,
+    TWO_LINE_INCREMENT: 100,
+    THREE_LINE_INCREMENT: 300,
+    TETRIS_INCREMENT: 1200
 };
 
 /**
