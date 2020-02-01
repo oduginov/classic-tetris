@@ -20,7 +20,7 @@ function rotate() {
         forthSquare = {x: this.squares[2].x, y: this.squares[3].y + 1};
     } else {
         // The line is vertical.
-        // Calculate new squares for the squares of the tetromino-i
+        // Calculate new coordinates for the squares of the tetromino-i
         firstSquare = {x: this.squares[0].x - 2, y: this.squares[2].y};
         secondSquare = {x: this.squares[1].x - 1, y: this.squares[2].y};
         thirdSquare = this.squares[2];
