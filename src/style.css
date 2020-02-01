@@ -23,6 +23,7 @@ canvas {
   width: 300px;
   height: 600px;
   background-color: black;
+  border: 2px solid white;
   image-rendering: pixelated;
 }
 
@@ -65,4 +66,5 @@ section {
   width: 100px;
   height: 100px;
   background-color: black;
+  border: 2px solid white;
 }

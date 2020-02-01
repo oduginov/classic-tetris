@@ -1,65 +1,90 @@
 /*
  * Import functionality from other modules
  */
-
 const constants = require("./constants");
-const square = require("./square");
+const gameBoard = require("./game-board");
 const tetrominoI = require("./tetromino-i");
+const tetrominoO = require("./tetromino-o");
+const tetrominoT = require("./tetromino-t");
 
 /*
  * Define variables
  */
 const scale = 1; // seconds
 const speed = 5; // squares per <scale> sec
-const delay = scale / speed; // sec after which a figure drops by one pixel
+const delay = scale / speed; // sec after which a figure drops by one square below
 
-const draw = function (coordinates, innerColor, borderColors, isFulfilled) {
-    coordinates.forEach(s => square.paintSquare(s.x, s.y, innerColor, borderColors, isFulfilled));
-};
-
-function init(tetrominoType) {
-    let borderColors;
-    let innerColor;
-    let coordinates;
-    switch (tetrominoType) {
+function init() {
+    let currentTetromino;
+    switch (this.type) {
         case constants.TETROMINOS.I:
-            borderColors = tetrominoI.borderColors;
-            innerColor = tetrominoI.innerColor;
-            coordinates = tetrominoI.coordinates;
+            currentTetromino = tetrominoI;
             break;
-        case constants.TETROMINOS.J:
+        case constants.TETROMINOS.O:
+            currentTetromino = tetrominoO;
+            break;
+        case constants.TETROMINOS.T:
+            currentTetromino = tetrominoT;
             break;
     }
-    return {borderColors: borderColors, innerColor: innerColor, coordinates: coordinates};
+    return currentTetromino;
 }
 
-function run(tetrominoType) {
-    const data = init(tetrominoType);
-    draw(data.coordinates, data.innerColor, data.borderColors, false);
+function getRandomTetrominoType(n) {
+    const a =  Math.round(Math.random() * n);
+    console.log(a);
+    return a;
+}
+
+function run() {
+    this.type = getRandomTetrominoType(2);
+    this.data = this.init();
+    gameBoard.draw(this.data.coordinates, this.data.innerColor, this.data.borderColors, false);
 
     let prevTimestamp = Date.now();
 
-    function repaint() {
-        const elapsed = Date.now() - prevTimestamp; // millisecond
+    const repaint = () => {
+        const elapsed = Date.now() - prevTimestamp; // milliseconds
         if (elapsed / 1000 >= delay) {
             prevTimestamp = Date.now();
-            move(data);
+            if (!move(this.data)) {
+                // We stop dropping the current tetromino, save a state and
+                // reset the coordinates of the current tetromino
+                this.data.coordinates.forEach(square => gameBoard.bitmap[square.x][square.y] = true);
+                this.data.reset();
+
+                // Initiate dropping new tetromino
+                this.type = this.getRandomTetrominoType(2);
+                prevTimestamp = Date.now();
+                this.data = this.init();
+                this.gameBoard.draw(this.data.coordinates, this.data.innerColor, this.data.borderColors, false);
+
+                window.requestAnimationFrame(repaint);
+            }
         }
-        if (data.coordinates.every(square => square.y < constants.SIZE_FIELD.HEIGHT - 1)) {
-            requestAnimationFrame(repaint);
-        }
-    }
+        requestAnimationFrame(repaint);
+    };
 
     requestAnimationFrame(repaint);
 }
 
 function move(data) {
-    // Transfer a figure by one square below
-    draw(data.coordinates,"#000000", [], false);
-    data.coordinates.forEach(item => item.y++);
-    draw(data.coordinates, data.innerColor, data.borderColors, false);
+    // Can we move by one square below ?
+    if (data.coordinates.every(square => square.y < constants.SIZE_FIELD.HEIGHT - 1 && !gameBoard.bitmap[square.x][square.y + 1])) {
+        // We can move. Transfer a figure by one square below.
+        gameBoard.draw(data.coordinates, "#000000", [], false);
+        data.coordinates.forEach(item => item.y++);
+        gameBoard.draw(data.coordinates, data.innerColor, data.borderColors, false);
+        return true;
+    }
+    return false;
 }
 
 module.exports = {
     run: run,
+    type: 0,
+    gameBoard: gameBoard,
+    init: init,
+    data: null,
+    getRandomTetrominoType: getRandomTetrominoType,
 };
