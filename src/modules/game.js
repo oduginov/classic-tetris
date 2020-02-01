@@ -62,15 +62,8 @@ function run() {
 }
 
 function move(data) {
-    // Can we move by one square below ?
-    if (data.squares.every(square => square.y < constants.SIZE_FIELD.HEIGHT - 1 &&
-        !gameBoard.bitmap[square.x][square.y + 1])) {
-        // We can move. Transfer a figure by one square below.
-        const updatedSquares = data.squares.map(square => ({x: square.x, y: square.y + 1}));
-        tetromino.updateTetromino(data, ...updatedSquares);
-        return true;
-    }
-    return false;
+    const updatedSquares = data.squares.map(square => ({x: square.x, y: square.y + 1}));
+    return tetromino.updateTetromino(data, ...updatedSquares);
 }
 
 module.exports = {
