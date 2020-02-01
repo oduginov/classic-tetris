@@ -8,6 +8,9 @@ const tetrominoO = require("./tetromino-o");
 const tetrominoT = require("./tetromino-t");
 const tetromino = require("./tetromino");
 
+let currentTetramino = null;
+let type = 0;
+
 /*
  * Define variables
  */
@@ -15,45 +18,42 @@ const scale = 1; // seconds
 const speed = 5; // squares per <scale> seconds
 const delay = scale / speed; // sec after which a figure drops by one square below
 
-function init() {
-    let cur;
-    switch (this.type) {
+function obtainNewTetramino() {
+    type = Math.round(Math.random() * 2);
+    switch (type) {
         case constants.TETROMINOS.I:
-            cur = tetrominoI;
+            currentTetramino = tetrominoI;
             break;
         case constants.TETROMINOS.O:
-            cur = tetrominoO;
+            currentTetramino = tetrominoO;
             break;
         case constants.TETROMINOS.T:
-            cur = tetrominoT;
+            currentTetramino = tetrominoT;
             break;
     }
-    this.gameBoard.draw(cur.squares, cur.innerColor, cur.borderColors, false);
-    return cur;
-}
-
-function getRandomTetrominoType(n) {
-    return Math.round(Math.random() * n);
+    gameBoard.draw(currentTetramino.squares,
+        currentTetramino.innerColor,
+        currentTetramino.borderColors,
+        false);
 }
 
 function run() {
-    this.type = getRandomTetrominoType(2);
-    this.data = this.init();
+    init();
+    obtainNewTetramino();
     let prevTimestamp = Date.now();
 
     const repaint = () => {
         const elapsed = Date.now() - prevTimestamp; // milliseconds
         if (elapsed / 1000 >= delay) {
             prevTimestamp = Date.now();
-            if (!move(this.data)) {
+            if (!move()) {
                 // Stop dropping the current tetromino, save its state and
                 // reset the coordinates for the squares of the current tetromino
-                this.data.squares.forEach(square => gameBoard.bitmap[square.x][square.y] = true);
-                this.data.reset();
+                currentTetramino.squares.forEach(square => gameBoard.bitmap[square.x][square.y] = true);
+                currentTetramino.reset();
 
                 // Initiate dropping new tetromino
-                this.type = this.getRandomTetrominoType(2);
-                this.data = this.init();
+                obtainNewTetramino();
             }
         }
         requestAnimationFrame(repaint);
@@ -61,17 +61,28 @@ function run() {
     requestAnimationFrame(repaint);
 }
 
-function move(data) {
-    const updatedSquares = data.squares.map(square => ({x: square.x, y: square.y + 1}));
-    return tetromino.updateTetromino(data, ...updatedSquares);
+function move() {
+    const updatedSquares = currentTetramino.squares.map(square => ({x: square.x, y: square.y + 1}));
+    return tetromino.updateTetromino(currentTetramino, ...updatedSquares);
 }
 
+function init() {
+    document.addEventListener("keydown", (event) => {
+        if (event.code === "ArrowLeft") {
+            tetromino.moveLeft(currentTetramino);
+        }
+        if (event.code === "ArrowRight") {
+            tetromino.moveRight(currentTetramino);
+        }
+        if (event.code === "KeyX" && currentTetramino.rotateClockwise) {
+            currentTetramino.rotateClockwise();
+        }
+        if (event.code === "KeyZ" && currentTetramino.rotateCounterClockwise) {
+            currentTetramino.rotateCounterClockwise();
+        }
+    });
+}
 
 module.exports = {
     run: run,
-    type: constants.TETROMINOS.I, // <type> is the type of a tetromino
-    gameBoard: gameBoard,
-    init: init,
-    data: null,
-    getRandomTetrominoType: getRandomTetrominoType,
 };

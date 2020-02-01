@@ -23,7 +23,7 @@ function rotateClockwise() {
             forthSquare = {x: this.squares[3].x + 1, y: this.squares[3].y - 1};
         }
     } else {
-        // Out tetromino is horizontal
+        // Our tetromino is horizontal
         const y = this.squares[0].y;
         if (this.squares[3].y > y) {
             firstSquare = {x: this.squares[0].x + 1, y: this.squares[0].y - 1};
@@ -48,9 +48,10 @@ function rotateCounterclockwise() {
 }
 
 module.exports = {
-    borderColors: ["#150034", "#34007e", "#5900cb", "#7e00f6", "#ac6dff"],
-    innerColor: "#ffffff",
     squares: [{x: 4, y: 0}, {x: 5, y: 0}, {x: 6, y: 0}, {x: 5, y: 1}],
+    innerColor: "#ffffff",
+    borderColors: ["#150034", "#34007e", "#5900cb", "#7e00f6", "#ac6dff"],
     rotateClockwise: rotateClockwise,
+    rotateCounterClockwise: rotateCounterclockwise,
     reset: reset,
 };
