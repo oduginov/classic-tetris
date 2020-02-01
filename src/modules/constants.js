@@ -6,7 +6,7 @@
 const TETROMINOS = {I: 0, O: 1, T: 2, J: 3, L: 4, S: 5, Z: 6};
 
 /**
- * Define increments of the score of a game. According to the rule
+ * Define increments of the score. According to the rule
  * the classic tetris, we increment the score by 40 points, if the
  * destroyed horizontal lines are at most 3, and by 80 points, if
  * we have the tetris, i.e. the number of the destroyed lines equals
