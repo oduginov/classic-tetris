@@ -66,9 +66,10 @@ function move(data) {
     return tetromino.updateTetromino(data, ...updatedSquares);
 }
 
+
 module.exports = {
     run: run,
-    type: 0,
+    type: constants.TETROMINOS.I, // <type> is the type of a tetromino
     gameBoard: gameBoard,
     init: init,
     data: null,

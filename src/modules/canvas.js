@@ -1,5 +1,4 @@
 const constants = require("./constants");
-const utils = require("./utils");
 
 /* Declare and initialize variables for work with the canvas */
 
@@ -27,14 +26,8 @@ function paintRect(x1, y1, x2, y2, color) {
     context.fillRect(x1, y1, Math.abs(x2 - x1 + 1), Math.abs(y2 - y1 + 1));
 }
 
-function getColor(x, y) {
-    const color = Array.from(context.getImageData(x, y, 1, 1).data);
-    return utils.rgbaToHex(color);
-}
-
 module.exports = {
     canvasSize: {rows, cols},
     drawPixel: drawPixel,
     paintRect: paintRect,
-    getColor: getColor,
 };
