@@ -36,7 +36,7 @@ aside {
 
 ul {
   padding: 0;
-  margin: 0 50px 0 0;
+  margin: 0;
 }
 
 li {
@@ -54,12 +54,12 @@ section {
   display: flex;
   justify-content: space-between;
   width: 75px;
-  margin-top: 375px;
   cursor: pointer;
 }
 
-.vertical-order {
+aside.vertical-order {
   flex-direction: column;
+  justify-content: space-between;
 }
 
 .tile {
