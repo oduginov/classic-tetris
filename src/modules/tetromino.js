@@ -2,28 +2,26 @@ const gameBoard = require("./game-board");
 const constants = require("./constants");
 
 function updateTetromino(data, firstSquare, secondSquare, thirdSquare, forthSquare) {
-    gameBoard.draw(data.squares, "#000000", [], false);
-    data.squares[0] = firstSquare;
-    data.squares[1] = secondSquare;
-    data.squares[2] = thirdSquare;
-    data.squares[3] = forthSquare;
-    gameBoard.draw(data.squares, data.innerColor, data.borderColors, false);
+    const c = [firstSquare, secondSquare, thirdSquare, forthSquare];
+    if (c.every(square => square.x >= 0 && square.x < constants.SIZE_FIELD.WIDTH) &&
+        c.every(square => square.y < constants.SIZE_FIELD.HEIGHT) &&
+        c.every(square => !gameBoard.bitmap[square.x][square.y])) {
+        gameBoard.draw(data.squares, "#000000", [], false);
+        data.squares = c;
+        gameBoard.draw(data.squares, data.innerColor, data.borderColors, false);
+        return true;
+    }
+    return false;
 }
 
 function moveLeft(data) {
-    if (data.squares.every(square => square.x > 0 && !gameBoard.bitmap[square.x - 1][square.y])) {
-        gameBoard.draw(data.squares, "#000000", [], false);
-        data.squares.forEach(square => square.x--);
-        gameBoard.draw(data.squares, data.innerColor, data.borderColors, false);
-    }
+    const updatedSquares = data.squares.map(square => ({x: square.x - 1, y: square.y}));
+    updateTetromino(data, ...updatedSquares);
 }
 
 function moveRight(data) {
-    if (data.squares.every(square => square.x < constants.SIZE_FIELD.WIDTH - 1 && !gameBoard.bitmap[square.x + 1][square.y])) {
-        gameBoard.draw(data.squares, "#000000", [], false);
-        data.squares.forEach(square => square.x++);
-        gameBoard.draw(data.squares, data.innerColor, data.borderColors, false);
-    }
+    const updatedSquares = data.squares.map(square => ({x: square.x + 1, y: square.y}));
+    updateTetromino(data, ...updatedSquares);
 }
 
 module.exports = {

@@ -1,12 +1,7 @@
-const constants = require("./constants");
-const gameBoard = require("./game-board");
 const tetromino = require("./tetromino");
 
 function reset() {
-    this.squares[0] = {x: 4, y: 0};
-    this.squares[1] = {x: 5, y: 0};
-    this.squares[2] = {x: 6, y: 0};
-    this.squares[3] = {x: 5, y: 1};
+    this.squares = [{x: 4, y: 0}, {x: 5, y: 0}, {x: 6, y: 0}, {x: 5, y: 1}];
 }
 
 function rotateClockwise() {
@@ -42,15 +37,7 @@ function rotateClockwise() {
             forthSquare = {x: this.squares[3].x + 1, y: this.squares[3].y + 1};
         }
     }
-
-    // Check: can we rotate our tetromino-t?
-    const c = [firstSquare, secondSquare, thirdSquare, forthSquare];
-    if (c.every(square => square.x >= 0 && square.x < constants.SIZE_FIELD.WIDTH) &&
-        c.every(square => square.y >= 0 && square.y < constants.SIZE_FIELD.HEIGHT) &&
-        c.every(square => !gameBoard.bitmap[square.x][square.y])) {
-        // Yes, we can rotate and do it
-        tetromino.updateTetromino(this, firstSquare, secondSquare, thirdSquare, forthSquare);
-    }
+    tetromino.updateTetromino(this, firstSquare, secondSquare, thirdSquare, forthSquare);
 }
 
 /**
