@@ -41,21 +41,27 @@ function moveRight(tetromino) {
 
 /**
  * Rotate a square `S` with the board coordinates (x1, y1) around a position
- * with the board coordinates (x0, y0). If `clockwise` = true, then the rotation
- * is clockwise, otherwise counterclockwise.
+ * with the board coordinates (x0, y0) by 90 deg. If `clockwise` = true, then the rotation
+ * is clockwise, otherwise counterclockwise. Calculate new board coordinates as follows:
+ * (x, y)' = (x0, y0)' + A * (x1 - x0, y1 - y0)',
+ * where ' is transpose of vectors and A is the transformation matrix modelling the rotation
+ * | 0        alpha |
+ * | -alpha     0   |,
+ * where alpha is 1 or -1.
  *
- * @param {number} x0
- * @param {number} y0
- * @param {number} x1
- * @param {number} y1
- * @param {boolean} clockwise
+ * @param {number} x0 - The first coordinate of the rotation center
+ * @param {number} y0 - The second coordinate of the rotation center
+ * @param {number} x1 - The first coordinate of the rotated square
+ * @param {number} y1 - The second coordinate of the rotated square
+ * @param {boolean} clockwise - If true, then the rotation is clockwise,
+ * otherwise counterclockwise
+ *
  * @returns {*} - The board coordinates of new position for the square `S`.
  */
 function rotate(x0, y0, x1, y1, clockwise) {
     let alpha = clockwise ? -1 : 1;
-    let beta = clockwise ? 1 : -1;
     const x = x0 + alpha * (y1 - y0);
-    const y = y0 + beta * (x1 - x0);
+    const y = y0 - alpha * (x1 - x0);
     return {x: x, y: y};
 }
 
