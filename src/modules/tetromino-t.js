@@ -1,10 +1,6 @@
 const tetromino = require("./tetromino");
 const constants = require("./constants");
 
-function reset() {
-    this.squares = [{x: 4, y: 0}, {x: 5, y: 0}, {x: 6, y: 0}, {x: 5, y: 1}];
-}
-
 module.exports = {
     type: constants.TETROMINOS.T,
     squares: [{x: 4, y: 0}, {x: 5, y: 0}, {x: 6, y: 0}, {x: 5, y: 1}],
@@ -13,5 +9,7 @@ module.exports = {
     rotate: function (clockwise){
         return tetromino.rotateTetromino(this, clockwise);
     },
-    reset: reset,
+    reset: function () {
+        this.squares = [{x: 4, y: 0}, {x: 5, y: 0}, {x: 6, y: 0}, {x: 5, y: 1}];
+    }
 };
