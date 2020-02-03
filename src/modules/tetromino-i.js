@@ -1,4 +1,5 @@
 const tetromino = require("./tetromino");
+const constants = require("./constants");
 
 function reset() {
     for (let i = 0; i < 4; i++) {
@@ -28,10 +29,12 @@ function rotate() {
 }
 
 module.exports = {
+    type: constants.TETROMINOS.I,
     borderColors: ["#150034", "#34007e", "#5900cb", "#7e00f6", "#ac6dff"],
     innerColor: "#ffffff",
     squares: [{x: 3, y: 0}, {x: 4, y: 0}, {x: 5, y: 0}, {x: 6, y: 0}],
-    rotateClockwise: rotate,
-    rotateCounterClockwise: rotate,
+    rotate: function (clockwise) {
+        tetromino.rotateTetromino(this, clockwise);
+    },
     reset: reset,
 };

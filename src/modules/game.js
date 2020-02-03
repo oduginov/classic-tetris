@@ -70,7 +70,7 @@ function run() {
 
 function move() {
     const updatedSquares = currentTetramino.squares.map(square => ({x: square.x, y: square.y + 1}));
-    return tetromino.updateTetromino(currentTetramino, ...updatedSquares);
+    return tetromino.move(currentTetramino, updatedSquares);
 }
 
 function init() {
@@ -88,11 +88,11 @@ function init() {
                 downArrow = true;
             }
         }
-        if (event.code === "KeyX" && currentTetramino.rotateClockwise) {
-            currentTetramino.rotateClockwise();
+        if (event.code === "KeyX" && currentTetramino.rotate) {
+            currentTetramino.rotate(true);
         }
-        if (event.code === "KeyZ" && currentTetramino.rotateCounterClockwise) {
-            currentTetramino.rotateCounterClockwise();
+        if (event.code === "KeyZ" && currentTetramino.rotate) {
+            currentTetramino.rotate(false);
         }
     });
     document.addEventListener("keyup", (event) => {

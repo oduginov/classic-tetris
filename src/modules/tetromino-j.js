@@ -6,17 +6,13 @@ function reset() {
 }
 
 
-function rotateCounterclockwise(){
-
-}
-
 module.exports = {
+    type: constants.TETROMINOS.J,
     squares: [{x: 4, y: 0}, {x: 5, y: 0}, {x: 6, y: 0}, {x: 6, y: 1}],
     innerColor: "#6d00ff",
     borderColors: ["#10002a", "#26005d", "#270061", "#4800ae", "#5e00de"],
-    rotateClockwise: function () {
-        return tetromino.rotateClockwise(this, constants.TETROMINOS.J)
+    rotate: function (clockwise){
+      tetromino.rotateTetromino(this, clockwise);
     },
-    rotateCounterClockwise: rotateCounterclockwise,
     reset: reset,
 };
