@@ -2,19 +2,16 @@ const constants = require("./constants");
 const canvas = require("./canvas");
 
 /**
- * We paint a square of a game zone. In the classic tetris (Nintendo classic tetris)
- * some tetrominos consist of squares that are colored every inch and some tetrominos
- * consist of squares that are colored in several colors.
+ * We paint square of a game zone, which is a piece of a tetromino.
  *
  * @param {Number} x - The first coordinate of the square on the game field. We have
  * the following restriction: 0 <= x <= constants.SIZE_FIELD.WIDTH.
  * @param {Number} y - The second coordinate of the square on the game field. Feasible
  * values of the variable y are defined as follows: 0 <= y <= constants.SIZE_FIELD.HEIGHT.
- * @param {Boolean} isFullFilled -
  * @param {String} innerColor - The main color for the body of a square in the hex code
  * @param {String[]} borderColors - The border colors for the body of a square in the hex code
  */
-const paintSquare = function (x, y, innerColor, borderColors, isFullFilled) {
+const paintSquare = function (x, y, innerColor, borderColors) {
     const borderSize = borderColors.length;
 
     /*

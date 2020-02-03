@@ -1,4 +1,3 @@
-const constants = require("./constants");
 const game = require("./game");
 
 /**

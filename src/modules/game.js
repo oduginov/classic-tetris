@@ -6,19 +6,22 @@ const gameBoard = require("./game-board");
 const tetrominoI = require("./tetromino-i");
 const tetrominoO = require("./tetromino-o");
 const tetrominoT = require("./tetromino-t");
+const tetrominoJ = require("./tetromino-j");
+const tetrominoL = require("./tetromino-l");
 const tetromino = require("./tetromino");
-
-let currentTetramino = null;
 
 /*
  * Define variables
  */
 const scale = 1; // seconds
 const speed = 5; // squares per <scale> seconds
-const delay = scale / speed; // sec after which a figure drops by one square below
+let delay = scale / speed; // sec after which a figure drops by one square below
+let prevDelay = 0;
+let currentTetramino = null;
+let downArrow = false;
 
 function obtainNewTetramino() {
-    switch (Math.round(Math.random() * 2)) {
+    switch (Math.round(Math.random() * 5)) {
         case constants.TETROMINOS.I:
             currentTetramino = tetrominoI;
             break;
@@ -27,6 +30,12 @@ function obtainNewTetramino() {
             break;
         case constants.TETROMINOS.T:
             currentTetramino = tetrominoT;
+            break;
+        case constants.TETROMINOS.L:
+            currentTetramino = tetrominoL;
+            break;
+        case constants.TETROMINOS.J:
+            currentTetramino = tetrominoJ;
             break;
     }
     gameBoard.draw(currentTetramino.squares,
@@ -72,11 +81,24 @@ function init() {
         if (event.code === "ArrowRight") {
             tetromino.moveRight(currentTetramino);
         }
+        if (event.code === "ArrowDown") {
+            if(!downArrow) {
+                prevDelay = delay;
+                delay = 0.05;
+                downArrow = true;
+            }
+        }
         if (event.code === "KeyX" && currentTetramino.rotateClockwise) {
             currentTetramino.rotateClockwise();
         }
         if (event.code === "KeyZ" && currentTetramino.rotateCounterClockwise) {
             currentTetramino.rotateCounterClockwise();
+        }
+    });
+    document.addEventListener("keyup", (event) => {
+        if (event.code === "ArrowDown") {
+            delay = prevDelay;
+            downArrow = false;
         }
     });
 }

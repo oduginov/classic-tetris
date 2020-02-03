@@ -3,7 +3,7 @@
  *
  * @type {{S: number, T: number, I: number, J: number, Z: number, L: number, O: number}}
  */
-const TETROMINOS = {I: 0, O: 1, T: 2, J: 3, L: 4, S: 5, Z: 6};
+const TETROMINOS = {I: 0, O: 1, T: 2, L: 3, J: 4, S: 5, Z: 6};
 
 /**
  * Define increments of the score. According to the rule
