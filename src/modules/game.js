@@ -8,6 +8,8 @@ const tetrominoO = require("./tetromino-o");
 const tetrominoT = require("./tetromino-t");
 const tetrominoJ = require("./tetromino-j");
 const tetrominoL = require("./tetromino-l");
+const tetrominoZ = require("./tetromino-z");
+const tetrominoS = require("./tetromino-s");
 const tetromino = require("./tetromino");
 
 /*
@@ -21,7 +23,7 @@ let currentTetramino = null;
 let isPressedDownArrow = false;
 
 function obtainNewTetramino() {
-    switch (Math.round(Math.random() * 4)) {
+    switch (Math.round(Math.random() * 6)) {
         case constants.TETROMINOS.I:
             currentTetramino = tetrominoI;
             break;
@@ -36,6 +38,12 @@ function obtainNewTetramino() {
             break;
         case constants.TETROMINOS.J:
             currentTetramino = tetrominoJ;
+            break;
+        case constants.TETROMINOS.Z:
+            currentTetramino = tetrominoZ;
+            break;
+        case constants.TETROMINOS.S:
+            currentTetramino = tetrominoS;
             break;
     }
     gameBoard.draw(currentTetramino.squares,
