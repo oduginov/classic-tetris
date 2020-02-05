@@ -18,10 +18,10 @@ const speed = 5; // squares per <scale> seconds
 let delay = scale / speed; // sec after which a figure drops by one square below
 let prevDelay = 0;
 let currentTetramino = null;
-let downArrow = false;
+let isPressedDownArrow = false;
 
 function obtainNewTetramino() {
-    switch (Math.round(Math.random() * 5)) {
+    switch (Math.round(Math.random() * 4)) {
         case constants.TETROMINOS.I:
             currentTetramino = tetrominoI;
             break;
@@ -82,10 +82,10 @@ function init() {
             tetromino.moveRight(currentTetramino);
         }
         if (event.code === "ArrowDown") {
-            if(!downArrow) {
+            if(!isPressedDownArrow) {
                 prevDelay = delay;
                 delay = 0.05;
-                downArrow = true;
+                isPressedDownArrow = true;
             }
         }
         if (event.code === "KeyX" && currentTetramino.rotate) {
@@ -98,7 +98,7 @@ function init() {
     document.addEventListener("keyup", (event) => {
         if (event.code === "ArrowDown") {
             delay = prevDelay;
-            downArrow = false;
+            isPressedDownArrow = false;
         }
     });
 }

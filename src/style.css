@@ -22,7 +22,6 @@ main {
 canvas {
   width: 300px;
   height: 600px;
-  background-color: black;
   border: 2px solid white;
   image-rendering: pixelated;
 }

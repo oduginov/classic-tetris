@@ -11,7 +11,7 @@ function move(t, squares) {
     if (squares.every(square => square.x >= 0 && square.x < constants.SIZE_FIELD.WIDTH) &&
         squares.every(square => square.y < constants.SIZE_FIELD.HEIGHT) &&
         squares.every(square => !gameBoard.bitmap[square.x][square.y])) {
-        gameBoard.draw(t.squares, "#000000", [], false);
+        gameBoard.erase(t.squares);
         t.squares = squares;
         gameBoard.draw(t.squares, t.innerColor, t.borderColors, false);
         return true;
@@ -44,7 +44,7 @@ function moveRight(tetromino) {
  * with the board coordinates (x0, y0) by 90 deg. If `clockwise` = true, then the rotation
  * is clockwise, otherwise counterclockwise. Calculate new board coordinates as follows:
  * (x, y)' = (x0, y0)' + A * (x1 - x0, y1 - y0)',
- * where ' is transpose of vectors and A is the transformation matrix modelling the rotation
+ * where ' is the transpose of vectors and A is the transformation matrix modelling the rotation
  * | 0        alpha |
  * | -alpha     0   |,
  * where alpha is 1 or -1.

@@ -8,11 +8,16 @@ bitmap.forEach((item, index, baseArray) => {
 });
 
 
-function draw (coordinates, innerColor, borderColors, isFulfilled) {
-    coordinates.forEach(s => square.paintSquare(s.x, s.y, innerColor, borderColors, isFulfilled));
+function draw (tetromino, innerColor, borderColors) {
+    tetromino.forEach(s => square.paintSquare(s.x, s.y, innerColor, borderColors));
+}
+
+function erase (tetromino){
+    tetromino.forEach(s => square.eraseSquare(s.x, s.y));
 }
 
 module.exports = {
     draw: draw,
+    erase: erase,
     bitmap: bitmap,
 };

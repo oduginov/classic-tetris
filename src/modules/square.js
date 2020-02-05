@@ -11,7 +11,7 @@ const canvas = require("./canvas");
  * @param {String} innerColor - The main color for the body of a square in the hex code
  * @param {String[]} borderColors - The border colors for the body of a square in the hex code
  */
-const paintSquare = function (x, y, innerColor, borderColors) {
+function paintSquare(x, y, innerColor, borderColors) {
     const borderSize = borderColors.length;
 
     /*
@@ -38,7 +38,16 @@ const paintSquare = function (x, y, innerColor, borderColors) {
     const y1 = y * constants.LINE_PIXELS_IN_SQUARE + borderSize;
     const eps = constants.LINE_PIXELS_IN_SQUARE - 2 * borderSize - 1;
     canvas.paintRect(x1, y1, x1 + eps, y1 + eps, innerColor);
-};
+}
+
+/**
+ * Erase a square on the game board with the specified board coordinates
+ * @param x - The first board coordinate of the erased square
+ * @param y - The second board coordinate of the erased square
+ */
+function eraseSquare(x, y) {
+    paintSquare(x, y, constants.GAME_BOARD_COLOR, []);
+}
 
 /**
  * Model square of a tetromino.
@@ -46,4 +55,5 @@ const paintSquare = function (x, y, innerColor, borderColors) {
  */
 module.exports = {
     paintSquare: paintSquare,
+    eraseSquare: eraseSquare,
 };

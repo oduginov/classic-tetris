@@ -10,6 +10,8 @@ canvas.height = rows;
 
 const context = canvas.getContext("2d");
 
+canvas.style.backgroundColor = constants.GAME_BOARD_COLOR;
+
 /**
  * Paint a pixel of the canvas with given coordinates (x, y) in the specified color.
  * @param x - The first canvas coordinate of a pixel
