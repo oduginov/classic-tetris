@@ -1,5 +1,6 @@
 const constants = require("./constants");
 const canvas = require("./canvas");
+const gameBoard = require("./game-board");
 
 /**
  * We paint square of a game zone, which is a piece of a tetromino.
@@ -47,6 +48,19 @@ function paintSquare(x, y, innerColor, borderColors) {
  */
 function eraseSquare(x, y) {
     paintSquare(x, y, constants.GAME_BOARD_COLOR, []);
+    gameBoard.bitmap[y][x] = false;
+}
+
+function copySquare(x1, y1, x2, y2) {
+    let X1 = x1 * constants.LINE_PIXELS_IN_SQUARE;
+    let Y1 = y1 * constants.LINE_PIXELS_IN_SQUARE;
+    let X2 = x2 * constants.LINE_PIXELS_IN_SQUARE;
+    let Y2 = y2 * constants.LINE_PIXELS_IN_SQUARE;
+    for (let i = 0; i < constants.LINE_PIXELS_IN_SQUARE; i++) {
+        for (let j = 0; j < constants.LINE_PIXELS_IN_SQUARE; j++) {
+
+        }
+    }
 }
 
 /**

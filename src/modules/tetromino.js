@@ -10,7 +10,7 @@ const constants = require("./constants");
 function move(t, squares) {
     if (squares.every(square => square.x >= 0 && square.x < constants.SIZE_FIELD.WIDTH) &&
         squares.every(square => square.y < constants.SIZE_FIELD.HEIGHT) &&
-        squares.every(square => !gameBoard.bitmap[square.x][square.y])) {
+        squares.every(square => !gameBoard.bitmap[square.y][square.x])) {
         gameBoard.erase(t.squares);
         t.squares = squares;
         gameBoard.draw(t.squares, t.innerColor, t.borderColors, false);
