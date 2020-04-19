@@ -19,5 +19,8 @@ module.exports = {
         new copy([
             {from: "./src/style.css", to: path.resolve(__dirname, "dist")}
         ]),
+        new copy([
+            {from: "./assets/icons", to: path.resolve(__dirname, "dist")}
+        ]),
     ]
 };

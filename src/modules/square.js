@@ -1,5 +1,5 @@
-const constants = require("./constants");
-const canvas = require("./canvas");
+const constants = require('./constants');
+const canvas = require('./canvas');
 
 /**
  * We paint square of a game zone, which is a piece of a tetromino.
@@ -53,7 +53,4 @@ function eraseSquare(x, y) {
  * Model square of a tetromino.
  * @type {{paintSquare: *}}
  */
-module.exports = {
-    paintSquare: paintSquare,
-    eraseSquare: eraseSquare,
-};
+module.exports = { paintSquare, eraseSquare };

@@ -1,5 +1,5 @@
-const gameBoard = require("./game-board");
-const constants = require("./constants");
+const gameBoard = require('./game-board');
+const constants = require('./constants');
 
 /**
  *
@@ -8,15 +8,15 @@ const constants = require("./constants");
  * @returns {boolean}
  */
 function move(t, squares) {
-    if (squares.every(square => square.x >= 0 && square.x < constants.SIZE_FIELD.WIDTH) &&
-        squares.every(square => square.y < constants.SIZE_FIELD.HEIGHT) &&
-        squares.every(square => !gameBoard.bitmap[square.x][square.y])) {
-        gameBoard.erase(t.squares);
-        t.squares = squares;
-        gameBoard.draw(t.squares, t.innerColor, t.borderColors, false);
-        return true;
-    }
-    return false;
+  if (squares.every(square => square.x >= 0 && square.x < constants.SIZE_FIELD.WIDTH) &&
+    squares.every(square => square.y < constants.SIZE_FIELD.HEIGHT) &&
+    squares.every(square => !gameBoard.bitmap[square.x][square.y])) {
+    gameBoard.erase(t.squares);
+    t.squares = squares;
+    gameBoard.draw(t.squares, t.innerColor, t.borderColors, false);
+    return true;
+  }
+  return false;
 }
 
 /**
@@ -25,8 +25,8 @@ function move(t, squares) {
  * @returns {boolean}
  */
 function moveLeft(tetromino) {
-    const updatedSquares = tetromino.squares.map(square => ({x: square.x - 1, y: square.y}));
-    return move(tetromino, updatedSquares);
+  const updatedSquares = tetromino.squares.map(square => ({ x: square.x - 1, y: square.y }));
+  return move(tetromino, updatedSquares);
 }
 
 /**
@@ -35,8 +35,8 @@ function moveLeft(tetromino) {
  * @returns {boolean}
  */
 function moveRight(tetromino) {
-    const updatedSquares = tetromino.squares.map(square => ({x: square.x + 1, y: square.y}));
-    return move(tetromino, updatedSquares);
+  const updatedSquares = tetromino.squares.map(square => ({ x: square.x + 1, y: square.y }));
+  return move(tetromino, updatedSquares);
 }
 
 /**
@@ -59,23 +59,18 @@ function moveRight(tetromino) {
  * @returns {*} - The board coordinates of new position for the square `S`.
  */
 function rotate(x0, y0, x1, y1, clockwise) {
-    let alpha = clockwise ? -1 : 1;
-    const x = x0 + alpha * (y1 - y0);
-    const y = y0 - alpha * (x1 - x0);
-    return {x: x, y: y};
+  const alpha = clockwise ? -1 : 1;
+  const x = x0 + alpha * (y1 - y0);
+  const y = y0 - alpha * (x1 - x0);
+  return { x, y };
 }
 
 function rotateTetromino(t, clockwise) {
-    const rotatedTetromino = t.squares.map(square => {
-        let center = t.type === constants.TETROMINOS.I ? t.squares[2] : t.squares[1];
-        return rotate(center.x, center.y, square.x, square.y, clockwise);
-    });
-    return move(t, rotatedTetromino);
+  const rotatedTetromino = t.squares.map(square => {
+    const center = t.type === constants.TETROMINOS.I ? t.squares[2] : t.squares[1];
+    return rotate(center.x, center.y, square.x, square.y, clockwise);
+  });
+  return move(t, rotatedTetromino);
 }
 
-module.exports = {
-    moveLeft: moveLeft,
-    moveRight: moveRight,
-    move: move,
-    rotateTetromino: rotateTetromino,
-};
+module.exports = { moveLeft, moveRight, move, rotateTetromino };

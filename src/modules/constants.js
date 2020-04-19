@@ -3,7 +3,7 @@
  *
  * @type {{S: number, T: number, I: number, J: number, Z: number, L: number, O: number}}
  */
-const TETROMINOS = {I: 0, O: 1, T: 2, L: 3, J: 4, Z: 5, S: 6};
+const TETROMINOS = { I: 0, O: 1, T: 2, L: 3, J: 4, Z: 5, S: 6 };
 
 /**
  * Define increments of the score. According to the rule
@@ -15,10 +15,10 @@ const TETROMINOS = {I: 0, O: 1, T: 2, L: 3, J: 4, Z: 5, S: 6};
  * @type {{TETRIS_INCREMENT: number, SIMPLE_INCREMENT: number}}
  */
 const SCORE_INCREMENTS = {
-    ONE_LINE_INCREMENT: 40,
-    TWO_LINE_INCREMENT: 100,
-    THREE_LINE_INCREMENT: 300,
-    TETRIS_INCREMENT: 1200
+  ONE_LINE_INCREMENT: 40,
+  TWO_LINE_INCREMENT: 100,
+  THREE_LINE_INCREMENT: 300,
+  TETRIS_INCREMENT: 1200
 };
 
 /**
@@ -26,18 +26,12 @@ const SCORE_INCREMENTS = {
  * @type {{WIDTH: number, HEIGHT: number}} - Width and height of the game zone
  */
 const SIZE_FIELD = {
-    WIDTH: 10,
-    HEIGHT: 20
+  WIDTH: 10,
+  HEIGHT: 20
 };
 
 const LINE_PIXELS_IN_SQUARE = 24;
 
-const GAME_BOARD_COLOR = "#000";
+const GAME_BOARD_COLOR = '#000';
 
-module.exports = {
-    TETROMINOS: TETROMINOS,
-    SCORE_INCREMENTS: SCORE_INCREMENTS,
-    SIZE_FIELD: SIZE_FIELD,
-    LINE_PIXELS_IN_SQUARE: LINE_PIXELS_IN_SQUARE,
-    GAME_BOARD_COLOR: GAME_BOARD_COLOR,
-};
+module.exports = { TETROMINOS, SCORE_INCREMENTS, SIZE_FIELD, LINE_PIXELS_IN_SQUARE, GAME_BOARD_COLOR };

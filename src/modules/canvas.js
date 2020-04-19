@@ -1,14 +1,14 @@
-const constants = require("./constants");
+const constants = require('./constants');
 
 /* Declare and initialize variables for work with the canvas */
 
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById('canvas');
 const cols = constants.SIZE_FIELD.WIDTH * constants.LINE_PIXELS_IN_SQUARE;
 const rows = constants.SIZE_FIELD.HEIGHT * constants.LINE_PIXELS_IN_SQUARE;
 canvas.width = cols;
 canvas.height = rows;
 
-const context = canvas.getContext("2d");
+const context = canvas.getContext('2d');
 
 canvas.style.backgroundColor = constants.GAME_BOARD_COLOR;
 
@@ -29,7 +29,5 @@ function paintRect(x1, y1, x2, y2, color) {
 }
 
 module.exports = {
-    canvasSize: {rows, cols},
-    drawPixel: drawPixel,
-    paintRect: paintRect,
+    canvasSize: { rows, cols }, drawPixel, paintRect
 };

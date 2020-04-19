@@ -22,7 +22,8 @@ let prevDelay = 0;
 let currentTetramino = null;
 let isPressedDownArrow = false;
 
-function obtainNewTetramino() {
+function obtainNewTetromino() {
+  // eslint-disable-next-line default-case
     switch (Math.round(Math.random() * 6)) {
         case constants.TETROMINOS.I:
             currentTetramino = tetrominoI;
@@ -54,7 +55,7 @@ function obtainNewTetramino() {
 
 function run() {
     init();
-    obtainNewTetramino();
+    obtainNewTetromino();
     let prevTimestamp = Date.now(); // milliseconds
 
     const repaint = () => {
@@ -68,7 +69,7 @@ function run() {
                 currentTetramino.reset();
 
                 // Initiate dropping new tetromino
-                obtainNewTetramino();
+                obtainNewTetromino();
             }
         }
         requestAnimationFrame(repaint);
@@ -77,7 +78,7 @@ function run() {
 }
 
 function move() {
-    const updatedSquares = currentTetramino.squares.map(square => ({x: square.x, y: square.y + 1}));
+    const updatedSquares = currentTetramino.squares.map(square => ({ x: square.x, y: square.y + 1 }));
     return tetromino.move(currentTetramino, updatedSquares);
 }
 
@@ -90,7 +91,7 @@ function init() {
             tetromino.moveRight(currentTetramino);
         }
         if (event.code === "ArrowDown") {
-            if(!isPressedDownArrow) {
+            if (!isPressedDownArrow) {
                 prevDelay = delay;
                 delay = 0.05;
                 isPressedDownArrow = true;
@@ -111,6 +112,4 @@ function init() {
     });
 }
 
-module.exports = {
-    run: run,
-};
+module.exports = { run };

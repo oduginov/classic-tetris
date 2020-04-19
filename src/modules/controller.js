@@ -8,5 +8,5 @@ function startGame() {
 }
 
 module.exports = {
-    startGame: startGame,
+    startGame
 };
