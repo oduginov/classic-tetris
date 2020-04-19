@@ -9,9 +9,9 @@ const constants = require('./constants');
  */
 function move(t, squares) {
   if (squares.every(square => square.x >= 0 && square.x < constants.SIZE_FIELD.WIDTH) &&
-    squares.every(square => square.y < constants.SIZE_FIELD.HEIGHT) &&
-    squares.every(square => !gameBoard.bitmap[square.x][square.y])) {
-    gameBoard.erase(t.squares);
+    squares.every(square => square.y >= 0 && square.y < constants.SIZE_FIELD.HEIGHT) &&
+    squares.every(square => !gameBoard.bitmap[square.y][square.x])) {
+    gameBoard.eraseTetromino(t.squares);
     t.squares = squares;
     gameBoard.draw(t.squares, t.innerColor, t.borderColors, false);
     return true;

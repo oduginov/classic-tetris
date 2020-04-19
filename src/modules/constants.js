@@ -34,4 +34,17 @@ const LINE_PIXELS_IN_SQUARE = 24;
 
 const GAME_BOARD_COLOR = '#000';
 
-module.exports = { TETROMINOS, SCORE_INCREMENTS, SIZE_FIELD, LINE_PIXELS_IN_SQUARE, GAME_BOARD_COLOR };
+const RED = { innerColor: '#ff2000', borderColors: ['#1c0000', '#490703', '#4c0600', '#9e372d', '#b7301e'] };
+const BLUE = { innerColor: '#ffffff', borderColors: ['#150034', '#34007e', '#5900cb', '#7e00f6', '#ac6dff'] };
+const PURPLE = { innerColor: '#6d00ff', borderColors: ['#10002a', '#26005d', '#270061', '#4800ae', '#5e00de'] };
+
+module.exports = {
+  TETROMINOS,
+  SCORE_INCREMENTS,
+  SIZE_FIELD,
+  LINE_PIXELS_IN_SQUARE,
+  GAME_BOARD_COLOR,
+  RED,
+  BLUE,
+  PURPLE
+};
