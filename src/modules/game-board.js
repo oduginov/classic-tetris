@@ -7,14 +7,19 @@ bitmap.forEach((item, index, baseArray) => {
   baseArray[index].fill(false);
 });
 
-const draw = (tetromino, innerColor, borderColors) =>
+const drawTetromino = (tetromino, innerColor, borderColors) =>
   tetromino.forEach(s => square.paintSquare(s.x, s.y, innerColor, borderColors));
+
+const drawSquare = (x, y, innerColor, borderColors) => {
+  square.paintSquare(x, y, innerColor, borderColors);
+  bitmap[y][x] = true;
+};
 
 const eraseTetromino = tetromino => tetromino.forEach(s => square.eraseSquare(s.x, s.y));
 
 const eraseSquare = (x, y) => {
-    square.eraseSquare(x, y);
-    bitmap[y][x] = false;
+  square.eraseSquare(x, y);
+  bitmap[y][x] = false;
 };
 
 const getFullLines = () => {
@@ -27,4 +32,4 @@ const getFullLines = () => {
   return fullLines;
 };
 
-module.exports = { draw, eraseTetromino, bitmap, getFullLines, eraseSquare };
+module.exports = { drawTetromino, eraseTetromino, bitmap, getFullLines, eraseSquare, drawSquare };

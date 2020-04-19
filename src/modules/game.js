@@ -12,6 +12,8 @@ const tetrominoZ = require('./tetromino-z');
 const tetrominoS = require('./tetromino-s');
 const tetromino = require('./tetromino');
 
+const { getColorOfSquare, paintSquare } = require('./square');
+
 
 /*
  * Define variables
@@ -48,7 +50,7 @@ function obtainNewTetromino() {
       currentTetramino = tetrominoS;
       break;
   }
-  gameBoard.draw(currentTetramino.squares,
+  gameBoard.drawTetromino(currentTetramino.squares,
     currentTetramino.innerColor,
     currentTetramino.borderColors,
     false);
@@ -66,14 +68,18 @@ function run() {
       if (!move()) {
         // Stop dropping the current tetromino, save its state and
         // reset the coordinates for the squares of the current tetromino
-        currentTetramino.squares.forEach(square => gameBoard.bitmap[square.y][square.x] = true);
+        currentTetramino
+          .squares
+          .forEach(square => gameBoard.bitmap[square.y][square.x] = true);
         currentTetramino.reset();
 
         const fullLines = gameBoard.getFullLines();
+        // console.log(fullLines);
         if (fullLines.length) {
           burnLines(fullLines);
+          // dropLines(fullLines);
+          // console.log(gameBoard.bitmap);
         }
-        // TODO drop skyscraper
         // Initiate dropping new tetromino
         obtainNewTetromino();
       }
@@ -94,14 +100,44 @@ function burnLines(fullLines) {
       fullLines.forEach(line => {
         gameBoard.eraseSquare(indexBurnedSquare, line);
         gameBoard.eraseSquare(constants.SIZE_FIELD.WIDTH - indexBurnedSquare - 1, line);
-        console.log(gameBoard.bitmap);
       });
       indexBurnedSquare--;
     }
     if (indexBurnedSquare >= 0) {
       requestAnimationFrame(repaint);
+    } else {
+      dropLines(fullLines);
     }
   };
+  requestAnimationFrame(repaint);
+}
+
+function dropLines(fullLines) {
+  let prevTimestamp = Date.now(); // milliseconds
+
+  const repaint = () => {
+    const elapsed = Date.now() - prevTimestamp; // milliseconds
+
+    if (elapsed / 1000 >= 0.00000001) {
+      const erasedLine = fullLines.shift();
+      prevTimestamp = Date.now();
+      let i = erasedLine;
+      while (i >= 1 && !gameBoard.bitmap[i - 1].every(s => !s)) {
+        for (let j = 0; j < constants.SIZE_FIELD.WIDTH; j++) {
+          const color = getColorOfSquare(j, i - 1);
+          if (color) {
+            gameBoard.drawSquare(j, i, color.innerColor, color.borderColors);
+            gameBoard.eraseSquare(j, i - 1);
+          }
+        }
+        i--;
+      }
+      if (fullLines.length) {
+        requestAnimationFrame(repaint);
+      }
+    }
+  };
+
   requestAnimationFrame(repaint);
 }
 

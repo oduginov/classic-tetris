@@ -13,7 +13,7 @@ function move(t, squares) {
     squares.every(square => !gameBoard.bitmap[square.y][square.x])) {
     gameBoard.eraseTetromino(t.squares);
     t.squares = squares;
-    gameBoard.draw(t.squares, t.innerColor, t.borderColors, false);
+    gameBoard.drawTetromino(t.squares, t.innerColor, t.borderColors, false);
     return true;
   }
   return false;
