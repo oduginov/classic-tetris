@@ -1,43 +1,53 @@
 const gameBoard = require('./game-board');
 const constants = require('./constants');
 
+function Tetromino(type, borderColors, innerColor, squares, reset) {
+  this.type = type;
+  this.innerColor = innerColor;
+  this.borderColors = borderColors;
+  this.squares = squares;
+  this.reset = reset;
+}
+
 /**
  *
- * @param t
  * @param squares
  * @returns {boolean}
  */
-function move(t, squares) {
+// eslint-disable-next-line func-names
+Tetromino.prototype.move = function (squares) {
   if (squares.every(square => square.x >= 0 && square.x < constants.SIZE_FIELD.WIDTH) &&
     squares.every(square => square.y >= 0 && square.y < constants.SIZE_FIELD.HEIGHT) &&
     squares.every(square => !gameBoard.bitmap[square.y][square.x])) {
-    gameBoard.eraseTetromino(t.squares);
-    t.squares = squares;
-    gameBoard.drawTetromino(t.squares, t.innerColor, t.borderColors, false);
+    gameBoard.eraseTetromino(this.squares);
+    this.squares = squares;
+    gameBoard.drawTetromino(this.squares, this.innerColor, this.borderColors, false);
     return true;
   }
   return false;
-}
+};
 
 /**
  *
  * @param tetromino
  * @returns {boolean}
  */
-function moveLeft(tetromino) {
-  const updatedSquares = tetromino.squares.map(square => ({ x: square.x - 1, y: square.y }));
-  return move(tetromino, updatedSquares);
-}
+// eslint-disable-next-line func-names
+Tetromino.prototype.moveLeft = function() {
+  const updatedSquares = this.squares.map(square => ({ x: square.x - 1, y: square.y }));
+  return this.move(updatedSquares);
+};
 
 /**
  *
  * @param tetromino
  * @returns {boolean}
  */
-function moveRight(tetromino) {
-  const updatedSquares = tetromino.squares.map(square => ({ x: square.x + 1, y: square.y }));
-  return move(tetromino, updatedSquares);
-}
+// eslint-disable-next-line func-names
+Tetromino.prototype.moveRight = function () {
+  const updatedSquares = this.squares.map(square => ({ x: square.x + 1, y: square.y }));
+  return this.move(updatedSquares);
+};
 
 /**
  * Rotate a square `S` with the board coordinates (x1, y1) around a position
@@ -58,19 +68,103 @@ function moveRight(tetromino) {
  *
  * @returns {*} - The board coordinates of new position for the square `S`.
  */
-function rotate(x0, y0, x1, y1, clockwise) {
+function rotateSquare(x0, y0, x1, y1, clockwise) {
   const alpha = clockwise ? -1 : 1;
   const x = x0 + alpha * (y1 - y0);
   const y = y0 - alpha * (x1 - x0);
   return { x, y };
 }
 
-function rotateTetromino(t, clockwise) {
-  const rotatedTetromino = t.squares.map(square => {
-    const center = t.type === constants.TETROMINOS.I ? t.squares[2] : t.squares[1];
-    return rotate(center.x, center.y, square.x, square.y, clockwise);
-  });
-  return move(t, rotatedTetromino);
-}
+// eslint-disable-next-line func-names
+Tetromino.prototype.rotate = function(clockwise) {
+  if (this.type !== constants.TETROMINOS.O) {
+    const rotatedTetromino = this.squares.map(square => {
+      const center = this.type === constants.TETROMINOS.I ? this.squares[2] : this.squares[1];
+      return rotateSquare(center.x, center.y, square.x, square.y, clockwise);
+    });
+    return this.move(rotatedTetromino);
+  }
+  return this;
+};
 
-module.exports = { moveLeft, moveRight, move, rotateTetromino };
+const I = new Tetromino(
+  constants.TETROMINOS.I,
+  constants.BLUE.borderColors,
+  constants.BLUE.innerColor,
+  [{ x: 3, y: 0 }, { x: 4, y: 0 }, { x: 5, y: 0 }, { x: 6, y: 0 }],
+  function reset() {
+    for (let i = 0; i < 4; i++) {
+      this.squares[i] = { x: 3 + i, y: 0 };
+    }
+  });
+
+const J = new Tetromino(
+  constants.TETROMINOS.J,
+  constants.RED.borderColors,
+  constants.RED.innerColor,
+  [{ x: 4, y: 0 }, { x: 5, y: 0 }, { x: 6, y: 0 }, { x: 6, y: 1 }],
+  function reset() {
+    this.squares = [{ x: 4, y: 0 }, { x: 5, y: 0 }, { x: 6, y: 0 }, { x: 6, y: 1 }];
+  });
+
+const L = new Tetromino(
+  constants.TETROMINOS.L,
+  constants.PURPLE.borderColors,
+  constants.PURPLE.innerColor,
+  [{ x: 4, y: 0 }, { x: 5, y: 0 }, { x: 6, y: 0 }, { x: 4, y: 1 }],
+  function reset() {
+    this.squares = [{ x: 4, y: 0 }, { x: 5, y: 0 }, { x: 6, y: 0 }, { x: 4, y: 1 }];
+  }
+);
+
+const O = new Tetromino(
+  constants.TETROMINOS.O,
+  constants.BLUE.borderColors,
+  constants.BLUE.innerColor,
+  [{ x: 4, y: 0 }, { x: 5, y: 0 }, { x: 4, y: 1 }, { x: 5, y: 1 }],
+  function reset() {
+    for (let i = 0; i < 2; i++) {
+      this.squares[i] = { x: 4 + i, y: 0 };
+      this.squares[i + 2] = { x: 4 + i, y: 1 };
+    }
+  }
+);
+
+const S = new Tetromino(
+  constants.TETROMINOS.S,
+  constants.PURPLE.borderColors,
+  constants.PURPLE.innerColor,
+  [{ x: 4, y: 0 }, { x: 5, y: 0 }, { x: 5, y: 1 }, { x: 6, y: 1 }],
+  function reset() {
+    for (let i = 1; i <= 2; i++) {
+      this.squares[i - 1] = { x: 3 + i, y: 0 };
+      this.squares[i + 1] = { x: 4 + i, y: 1 };
+    }
+  }
+);
+
+const T = new Tetromino(
+  constants.TETROMINOS.T,
+  constants.BLUE.borderColors,
+  constants.BLUE.innerColor,
+  [{ x: 4, y: 0 }, { x: 5, y: 0 }, { x: 6, y: 0 }, { x: 5, y: 1 }],
+  function reset() {
+    this.squares = [{ x: 4, y: 0 }, { x: 5, y: 0 }, { x: 6, y: 0 }, { x: 5, y: 1 }];
+  }
+);
+
+const Z = new Tetromino(
+  constants.TETROMINOS.Z,
+  constants.RED.borderColors,
+  constants.RED.innerColor,
+  [{ x: 4, y: 1 }, { x: 5, y: 1 }, { x: 5, y: 0 }, { x: 6, y: 0 }],
+  function reset() {
+    for (let i = 1; i <= 2; i++) {
+      this.squares[i - 1] = { x: 3 + i, y: 1 };
+      this.squares[i + 1] = { x: 4 + i, y: 0 };
+    }
+  }
+);
+
+
+module.exports = { tetromioes: [I, J, L, O, S, T, Z] };

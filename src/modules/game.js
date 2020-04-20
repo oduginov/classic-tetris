@@ -1,19 +1,7 @@
-/*
- * Import functionality from other modules
- */
 const constants = require('./constants');
 const gameBoard = require('./game-board');
-const tetrominoI = require('./tetromino-i');
-const tetrominoO = require('./tetromino-o');
-const tetrominoT = require('./tetromino-t');
-const tetrominoJ = require('./tetromino-j');
-const tetrominoL = require('./tetromino-l');
-const tetrominoZ = require('./tetromino-z');
-const tetrominoS = require('./tetromino-s');
-const tetromino = require('./tetromino');
-
-const { getColorOfSquare, paintSquare } = require('./square');
-
+const { tetromioes } = require('./tetromino');
+const { getColorOfSquare } = require('./square');
 
 /*
  * Define variables
@@ -26,30 +14,8 @@ let isPressedDownArrow = false;
 let prevDelay = 0;
 
 function obtainNewTetromino() {
-  // eslint-disable-next-line default-case
-  switch (Math.round(Math.random() * 6)) {
-    case constants.TETROMINOS.I:
-      currentTetramino = tetrominoI;
-      break;
-    case constants.TETROMINOS.O:
-      currentTetramino = tetrominoO;
-      break;
-    case constants.TETROMINOS.T:
-      currentTetramino = tetrominoT;
-      break;
-    case constants.TETROMINOS.L:
-      currentTetramino = tetrominoL;
-      break;
-    case constants.TETROMINOS.J:
-      currentTetramino = tetrominoJ;
-      break;
-    case constants.TETROMINOS.Z:
-      currentTetramino = tetrominoZ;
-      break;
-    case constants.TETROMINOS.S:
-      currentTetramino = tetrominoS;
-      break;
-  }
+  const i = Math.round(Math.random() * 6);
+  currentTetramino = tetromioes[i];
   gameBoard.drawTetromino(currentTetramino.squares,
     currentTetramino.innerColor,
     currentTetramino.borderColors,
@@ -74,11 +40,8 @@ function run() {
         currentTetramino.reset();
 
         const fullLines = gameBoard.getFullLines();
-        // console.log(fullLines);
         if (fullLines.length) {
           burnLines(fullLines);
-          // dropLines(fullLines);
-          // console.log(gameBoard.bitmap);
         }
         // Initiate dropping new tetromino
         obtainNewTetromino();
@@ -122,7 +85,7 @@ function dropLines(fullLines) {
       const erasedLine = fullLines.shift();
       prevTimestamp = Date.now();
       let i = erasedLine;
-      while (i >= 1 && !gameBoard.bitmap[i - 1].every(s => !s)) {
+      while (i >= 1 && !gameBoard.isEmptyLine(i - 1)) {
         for (let j = 0; j < constants.SIZE_FIELD.WIDTH; j++) {
           const color = getColorOfSquare(j, i - 1);
           if (color) {
@@ -143,16 +106,16 @@ function dropLines(fullLines) {
 
 function move() {
   const updatedSquares = currentTetramino.squares.map(square => ({ x: square.x, y: square.y + 1 }));
-  return tetromino.move(currentTetramino, updatedSquares);
+  return currentTetramino.move(updatedSquares);
 }
 
 function init() {
   document.addEventListener('keydown', (event) => {
     if (event.code === 'ArrowLeft') {
-      tetromino.moveLeft(currentTetramino);
+      currentTetramino.moveLeft();
     }
     if (event.code === 'ArrowRight') {
-      tetromino.moveRight(currentTetramino);
+      currentTetramino.moveRight();
     }
     if (event.code === 'ArrowDown') {
       if (!isPressedDownArrow) {

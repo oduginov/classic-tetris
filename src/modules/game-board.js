@@ -32,4 +32,14 @@ const getFullLines = () => {
   return fullLines;
 };
 
-module.exports = { drawTetromino, eraseTetromino, bitmap, getFullLines, eraseSquare, drawSquare };
+const isEmptyLine = line => bitmap[line].every(s => !s);
+
+module.exports = {
+  drawTetromino,
+  eraseTetromino,
+  bitmap,
+  getFullLines,
+  eraseSquare,
+  drawSquare,
+  isEmptyLine
+};
