@@ -15,7 +15,7 @@ function Tetromino(type, borderColors, innerColor, squares, reset) {
  * @returns {boolean}
  */
 // eslint-disable-next-line func-names
-Tetromino.prototype.move = function(squares) {
+Tetromino.prototype.move = function (squares) {
   if (squares.every(square => square.x >= 0 && square.x < constants.SIZE_FIELD.WIDTH) &&
     squares.every(square => square.y >= 0 && square.y < constants.SIZE_FIELD.HEIGHT) &&
     squares.every(square => !gameBoard.bitmap[square.y][square.x])) {
@@ -27,12 +27,12 @@ Tetromino.prototype.move = function(squares) {
   return false;
 };
 
-Tetromino.prototype.saveState = function() {
+Tetromino.prototype.saveState = function () {
   this.squares
     .forEach(square => gameBoard.bitmap[square.y][square.x] = true);
 };
 
-Tetromino.prototype.draw = function() {
+Tetromino.prototype.draw = function () {
   gameBoard.drawTetromino(this.squares, this.innerColor, this.borderColors, false);
 };
 
@@ -42,7 +42,7 @@ Tetromino.prototype.draw = function() {
  * @returns {boolean}
  */
 // eslint-disable-next-line func-names
-Tetromino.prototype.moveLeft = function() {
+Tetromino.prototype.moveLeft = function () {
   const updatedSquares = this.squares.map(square => ({ x: square.x - 1, y: square.y }));
   return this.move(updatedSquares);
 };
@@ -53,7 +53,7 @@ Tetromino.prototype.moveLeft = function() {
  * @returns {boolean}
  */
 // eslint-disable-next-line func-names
-Tetromino.prototype.moveRight = function() {
+Tetromino.prototype.moveRight = function () {
   const updatedSquares = this.squares.map(square => ({ x: square.x + 1, y: square.y }));
   return this.move(updatedSquares);
 };
@@ -85,7 +85,7 @@ function rotateSquare(x0, y0, x1, y1, clockwise) {
 }
 
 // eslint-disable-next-line func-names
-Tetromino.prototype.rotate = function(clockwise) {
+Tetromino.prototype.rotate = function (clockwise) {
   if (this.type !== constants.TETROMINOS.O) {
     const rotatedTetromino = this.squares.map(square => {
       const center = this.type === constants.TETROMINOS.I ? this.squares[2] : this.squares[1];
