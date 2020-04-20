@@ -2,8 +2,9 @@ const constants = require('./constants');
 const canvas = require('./canvas');
 
 function getColorOfSquare(x, y) {
-  const color =
-    canvas.getColorOfPixel(x * constants.LINE_PIXELS_IN_SQUARE, y * constants.LINE_PIXELS_IN_SQUARE);
+  const X = x * constants.LINE_PIXELS_IN_SQUARE;
+  const Y = y * constants.LINE_PIXELS_IN_SQUARE;
+  const color = canvas.getColorOfPixel(X, Y);
   const colors = [constants.RED, constants.BLUE, constants.PURPLE];
   return colors.reduce((acc, colorOfSquare) => {
     if (colorOfSquare.innerColor === color) {

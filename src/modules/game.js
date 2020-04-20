@@ -13,18 +13,15 @@ let currentTetramino = null;
 let isPressedDownArrow = false;
 let prevDelay = 0;
 
-function obtainNewTetromino() {
+function getTetromino() {
   const i = Math.round(Math.random() * 6);
   currentTetramino = tetromioes[i];
-  gameBoard.drawTetromino(currentTetramino.squares,
-    currentTetramino.innerColor,
-    currentTetramino.borderColors,
-    false);
+  currentTetramino.draw();
 }
 
 function run() {
   init();
-  obtainNewTetromino();
+  getTetromino();
   let prevTimestamp = Date.now(); // milliseconds
 
   const repaint = () => {
@@ -34,9 +31,7 @@ function run() {
       if (!move()) {
         // Stop dropping the current tetromino, save its state and
         // reset the coordinates for the squares of the current tetromino
-        currentTetramino
-          .squares
-          .forEach(square => gameBoard.bitmap[square.y][square.x] = true);
+        currentTetramino.saveState();
         currentTetramino.reset();
 
         const fullLines = gameBoard.getFullLines();
@@ -44,7 +39,7 @@ function run() {
           burnLines(fullLines);
         }
         // Initiate dropping new tetromino
-        obtainNewTetromino();
+        getTetromino();
       }
     }
     requestAnimationFrame(repaint);
@@ -105,7 +100,8 @@ function dropLines(fullLines) {
 }
 
 function move() {
-  const updatedSquares = currentTetramino.squares.map(square => ({ x: square.x, y: square.y + 1 }));
+  const updatedSquares = currentTetramino.squares
+    .map(square => ({ x: square.x, y: square.y + 1 }));
   return currentTetramino.move(updatedSquares);
 }
 

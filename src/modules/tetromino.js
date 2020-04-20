@@ -15,7 +15,7 @@ function Tetromino(type, borderColors, innerColor, squares, reset) {
  * @returns {boolean}
  */
 // eslint-disable-next-line func-names
-Tetromino.prototype.move = function (squares) {
+Tetromino.prototype.move = function(squares) {
   if (squares.every(square => square.x >= 0 && square.x < constants.SIZE_FIELD.WIDTH) &&
     squares.every(square => square.y >= 0 && square.y < constants.SIZE_FIELD.HEIGHT) &&
     squares.every(square => !gameBoard.bitmap[square.y][square.x])) {
@@ -25,6 +25,15 @@ Tetromino.prototype.move = function (squares) {
     return true;
   }
   return false;
+};
+
+Tetromino.prototype.saveState = function() {
+  this.squares
+    .forEach(square => gameBoard.bitmap[square.y][square.x] = true);
+};
+
+Tetromino.prototype.draw = function() {
+  gameBoard.drawTetromino(this.squares, this.innerColor, this.borderColors, false);
 };
 
 /**
@@ -44,7 +53,7 @@ Tetromino.prototype.moveLeft = function() {
  * @returns {boolean}
  */
 // eslint-disable-next-line func-names
-Tetromino.prototype.moveRight = function () {
+Tetromino.prototype.moveRight = function() {
   const updatedSquares = this.squares.map(square => ({ x: square.x + 1, y: square.y }));
   return this.move(updatedSquares);
 };
@@ -165,6 +174,5 @@ const Z = new Tetromino(
     }
   }
 );
-
 
 module.exports = { tetromioes: [I, J, L, O, S, T, Z] };
