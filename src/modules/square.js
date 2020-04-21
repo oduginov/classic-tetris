@@ -1,6 +1,12 @@
 const constants = require('./constants');
 const canvas = require('./canvas');
 
+function isOnGameBoard(x, y) {
+  const isByX = x >= 0 && x < constants.SIZE_FIELD.WIDTH;
+  const isByY = y >= 0 && y < constants.SIZE_FIELD.HEIGHT;
+  return isByX && isByY;
+}
+
 function getColorOfSquare(x, y) {
   const X = x * constants.LINE_PIXELS_IN_SQUARE;
   const Y = y * constants.LINE_PIXELS_IN_SQUARE;
@@ -28,9 +34,9 @@ function paintSquare(x, y, innerColor, borderColors) {
   const borderSize = borderColors.length;
 
   /*
-  * Draw the border of the square. The border is multilayer.
-  * Outer layer has a level 0.
-  */
+   * Draw the border of the square. The border is multilayer.
+   * Outer layer has a level 0.
+   */
   for (let layer = 0; layer < borderSize; layer++) {
     let X = x * constants.LINE_PIXELS_IN_SQUARE + layer;
     let Y = y * constants.LINE_PIXELS_IN_SQUARE + layer;
@@ -66,4 +72,4 @@ function eraseSquare(x, y) {
  * Model square of a tetromino.
  * @type {{paintSquare: *}}
  */
-module.exports = { paintSquare, eraseSquare, getColorOfSquare };
+module.exports = { paintSquare, eraseSquare, getColorOfSquare, isOnGameBoard };

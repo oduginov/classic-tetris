@@ -1,17 +1,12 @@
 {
     "env": {
         "browser": true,
+        "node": true,
+        "jasmine": true,
         "es6": true,
-        "node": true
-    },
-    "extends": "eslint:recommended",
-    "globals": {
-        "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
+        "jest": true
     },
     "parserOptions": {
-        "ecmaVersion": 2018,
-        "sourceType": "module",
         "ecmaFeatures": {
             "arrowFunctions": true,
             "blockBindings": true,
@@ -31,6 +26,11 @@
             "templateStrings": true
         }
     },
+    "extends": [
+        "eslint:recommended",
+        "plugin:node/recommended",
+        "plugin:prettier/recommended"
+    ],
     "rules": {
         "no-debugger": 1,
         // Possible errors
@@ -306,5 +306,27 @@
             7
         ],
         "no-bitwise": 2
-    }
+    },
+    "globals": {
+        "$": true,
+        "ga": true,
+        "__ENV__": true,
+        "__DEVTOOLS__": true,
+        "PUBLIC_URL": true,
+        "jestExpect": true
+    },
+    "overrides": [
+        {
+            "files": [
+                "test/**/*.js"
+            ],
+            "rules": {
+                "node/no-unpublished-require": "off",
+                "max-nested-callbacks": [
+                    2,
+                    10
+                ]
+            }
+        }
+    ]
 }

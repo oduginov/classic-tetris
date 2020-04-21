@@ -48,10 +48,13 @@ function getColorOfPixel(x, y) {
  */
 function rgbaToHex([r, g, b]) {
   return `#${[r.toString(16), g.toString(16), b.toString(16)]
-    .map(c => c === '0' ? '00' : c)
+    .map(c => (c === '0' ? '00' : c))
     .join('')}`;
 }
 
 module.exports = {
-  canvasSize: { rows, cols }, drawPixel, paintRect, getColorOfPixel
+  canvasSize: { rows, cols },
+  drawPixel,
+  paintRect,
+  getColorOfPixel
 };

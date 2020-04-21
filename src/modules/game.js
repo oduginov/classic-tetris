@@ -57,7 +57,10 @@ function burnLines(fullLines) {
       prevTimestamp = Date.now();
       fullLines.forEach(line => {
         gameBoard.eraseSquare(indexBurnedSquare, line);
-        gameBoard.eraseSquare(constants.SIZE_FIELD.WIDTH - indexBurnedSquare - 1, line);
+        gameBoard.eraseSquare(
+          constants.SIZE_FIELD.WIDTH - indexBurnedSquare - 1,
+          line
+        );
       });
       indexBurnedSquare--;
     }
@@ -100,13 +103,15 @@ function dropLines(fullLines) {
 }
 
 function move() {
-  const updatedSquares = currentTetramino.squares
-    .map(square => ({ x: square.x, y: square.y + 1 }));
+  const updatedSquares = currentTetramino.squares.map(square => ({
+    x: square.x,
+    y: square.y + 1
+  }));
   return currentTetramino.move(updatedSquares);
 }
 
 function init() {
-  document.addEventListener('keydown', (event) => {
+  document.addEventListener('keydown', event => {
     if (event.code === 'ArrowLeft') {
       currentTetramino.moveLeft();
     }
@@ -127,7 +132,7 @@ function init() {
       currentTetramino.rotate(false);
     }
   });
-  document.addEventListener('keyup', (event) => {
+  document.addEventListener('keyup', event => {
     if (event.code === 'ArrowDown') {
       delay = prevDelay;
       isPressedDownArrow = false;

@@ -1,12 +1,12 @@
-const game = require("./game");
+const game = require('./game');
 
 /**
  * Start the game
  */
 function startGame() {
-    game.run();
+  game.run();
 }
 
 module.exports = {
-    startGame
+  startGame
 };
