@@ -240,4 +240,4 @@ const Z = new Tetromino(
   }
 );
 
-module.exports = { tetromioes: [I, J, L, O, S, T, Z] };
+module.exports = { tetrominoes: [I, J, L, O, S, T, Z] };

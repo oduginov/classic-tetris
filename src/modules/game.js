@@ -1,6 +1,6 @@
 const constants = require('./constants');
 const gameBoard = require('./game-board');
-const { tetromioes } = require('./tetromino');
+const { tetrominoes } = require('./tetromino');
 const { getColorOfSquare } = require('./square');
 
 /*
@@ -9,14 +9,14 @@ const { getColorOfSquare } = require('./square');
 const scale = 1; // seconds
 const speed = 5; // squares per <scale> seconds
 let delay = scale / speed; // sec after which a figure drops by one square below
-let currentTetramino = null;
+let currentTetromino = null;
 let isPressedDownArrow = false;
 let prevDelay = 0;
 
 function getTetromino() {
   const i = Math.round(Math.random() * 6);
-  currentTetramino = tetromioes[i];
-  currentTetramino.draw();
+  currentTetromino = tetrominoes[i];
+  currentTetromino.draw();
 }
 
 function run() {
@@ -31,8 +31,8 @@ function run() {
       if (!move()) {
         // Stop dropping the current tetromino, save its state and
         // reset the coordinates for the squares of the current tetromino
-        currentTetramino.saveState();
-        currentTetramino.reset();
+        currentTetromino.saveState();
+        currentTetromino.reset();
 
         const fullLines = gameBoard.getFullLines();
         if (fullLines.length) {
@@ -103,20 +103,20 @@ function dropLines(fullLines) {
 }
 
 function move() {
-  const updatedSquares = currentTetramino.squares.map(square => ({
+  const updatedSquares = currentTetromino.squares.map(square => ({
     x: square.x,
     y: square.y + 1
   }));
-  return currentTetramino.move(updatedSquares);
+  return currentTetromino.move(updatedSquares);
 }
 
 function init() {
   document.addEventListener('keydown', event => {
     if (event.code === 'ArrowLeft') {
-      currentTetramino.moveLeft();
+      currentTetromino.moveLeft();
     }
     if (event.code === 'ArrowRight') {
-      currentTetramino.moveRight();
+      currentTetromino.moveRight();
     }
     if (event.code === 'ArrowDown') {
       if (!isPressedDownArrow) {
@@ -125,11 +125,11 @@ function init() {
         isPressedDownArrow = true;
       }
     }
-    if (event.code === 'KeyX' && currentTetramino.rotate) {
-      currentTetramino.rotate(true);
+    if (event.code === 'KeyX' && currentTetromino.rotate) {
+      currentTetromino.rotate(true);
     }
-    if (event.code === 'KeyZ' && currentTetramino.rotate) {
-      currentTetramino.rotate(false);
+    if (event.code === 'KeyZ' && currentTetromino.rotate) {
+      currentTetromino.rotate(false);
     }
   });
   document.addEventListener('keyup', event => {
