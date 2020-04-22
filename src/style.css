@@ -12,7 +12,7 @@ body {
 
 main {
   display: flex;
-  width: 600px;
+  width: 700px;
   height: 600px;
   margin: 20px auto;
   background-color: darkslategray;
@@ -42,10 +42,6 @@ li {
   list-style-type: none;
 }
 
-section {
-  text-align: center;
-}
-
 
 /* CSS-styles for classes */
 
@@ -57,6 +53,7 @@ section {
 }
 
 aside.vertical-order {
+  width: 200px;
   flex-direction: column;
   justify-content: space-between;
 }
