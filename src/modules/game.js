@@ -2,7 +2,12 @@ const constants = require('./constants');
 const gameBoard = require('./game-board');
 const { tetrominoes } = require('./tetromino');
 const { getColorOfSquare } = require('./square');
-const { show, getScoreIncrement, getLevelIncrement } = require('./statistics');
+const {
+  show,
+  getScoreIncrement,
+  getLevelIncrement,
+  getDelayFrames
+} = require('./statistics');
 
 /*
  * Define variables
@@ -19,6 +24,9 @@ let score = 0;
 let prevLines = 0;
 let lines = 0;
 
+let delayFrames = 0;
+let prevDelayFrames = 0;
+
 function getTetromino() {
   const i = Math.round(Math.random() * 6);
   currentTetromino = tetrominoes[i];
@@ -27,14 +35,15 @@ function getTetromino() {
 
 function run() {
   level = startLevel;
+  delayFrames = getDelayFrames(level);
+  show(score, lines, level);
   init();
   getTetromino();
-  let prevTimestamp = Date.now(); // milliseconds
+  let currentFrames = 0;
 
   const repaint = () => {
-    const elapsed = Date.now() - prevTimestamp; // milliseconds
-    if (elapsed / 1000 >= delay) {
-      prevTimestamp = Date.now();
+    if (currentFrames >= delayFrames) {
+      currentFrames = 0;
       if (!move()) {
         // Stop dropping the current tetromino, save its state and
         // reset the coordinates for the squares of the current tetromino
@@ -48,8 +57,12 @@ function run() {
           lines += fullLines.length;
           const eps = getLevelIncrement(startLevel, level, lines, prevLines);
           if (eps) {
-            prevLines = lines;
             level += eps;
+            const nextDelayFrame = getDelayFrames(level);
+            if (nextDelayFrame !== delayFrames) {
+              prevLines = lines;
+            }
+            delayFrames = nextDelayFrame;
           }
           show(score, lines, level);
         }
@@ -57,19 +70,25 @@ function run() {
         getTetromino();
       }
     }
+    currentFrames++;
     requestAnimationFrame(repaint);
   };
+  currentFrames++;
   requestAnimationFrame(repaint);
 }
 
 function burnLines(fullLines) {
-  let prevTimestamp = Date.now(); // milliseconds
+  if (isPressedDownArrow) {
+    delayFrames = prevDelayFrames;
+    isPressedDownArrow = false;
+  }
+
   let indexBurnedSquare = Math.floor(constants.SIZE_FIELD.WIDTH / 2) - 1;
+  let currentFrames = 0;
 
   const repaint = () => {
-    const elapsed = Date.now() - prevTimestamp; // milliseconds
-    if (elapsed / 1000 >= 0.0000001) {
-      prevTimestamp = Date.now();
+    if (currentFrames >= 2) {
+      currentFrames = 0;
       fullLines.forEach(line => {
         gameBoard.eraseSquare(indexBurnedSquare, line);
         gameBoard.eraseSquare(
@@ -80,40 +99,33 @@ function burnLines(fullLines) {
       indexBurnedSquare--;
     }
     if (indexBurnedSquare >= 0) {
+      currentFrames++;
       requestAnimationFrame(repaint);
     } else {
       dropLines(fullLines);
     }
   };
+  currentFrames++;
   requestAnimationFrame(repaint);
 }
 
 function dropLines(fullLines) {
-  let prevTimestamp = Date.now(); // milliseconds
-
   const repaint = () => {
-    const elapsed = Date.now() - prevTimestamp; // milliseconds
-
-    if (elapsed / 1000 >= 0.00000001) {
-      const erasedLine = fullLines.shift();
-      prevTimestamp = Date.now();
-      let i = erasedLine;
-      while (i >= 1 && !gameBoard.isEmptyLine(i - 1)) {
-        for (let j = 0; j < constants.SIZE_FIELD.WIDTH; j++) {
-          const color = getColorOfSquare(j, i - 1);
-          if (color) {
-            gameBoard.drawSquare(j, i, color.innerColor, color.borderColors);
-            gameBoard.eraseSquare(j, i - 1);
-          }
+    let i = fullLines.shift();
+    while (i >= 1 && !gameBoard.isEmptyLine(i - 1)) {
+      for (let j = 0; j < constants.SIZE_FIELD.WIDTH; j++) {
+        const color = getColorOfSquare(j, i - 1);
+        if (color) {
+          gameBoard.drawSquare(j, i, color.innerColor, color.borderColors);
+          gameBoard.eraseSquare(j, i - 1);
         }
-        i--;
       }
-      if (fullLines.length) {
-        requestAnimationFrame(repaint);
-      }
+      i--;
+    }
+    if (fullLines.length) {
+      requestAnimationFrame(repaint);
     }
   };
-
   requestAnimationFrame(repaint);
 }
 
@@ -136,6 +148,8 @@ function init() {
     if (event.code === 'ArrowDown') {
       if (!isPressedDownArrow) {
         prevDelay = delay;
+        prevDelayFrames = delayFrames;
+        delayFrames = 3;
         delay = 0.05;
         isPressedDownArrow = true;
       }
@@ -148,8 +162,9 @@ function init() {
     }
   });
   document.addEventListener('keyup', event => {
-    if (event.code === 'ArrowDown') {
+    if (event.code === 'ArrowDown' && isPressedDownArrow) {
       delay = prevDelay;
+      delayFrames = prevDelayFrames;
       isPressedDownArrow = false;
     }
   });

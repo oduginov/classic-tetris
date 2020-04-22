@@ -18,4 +18,26 @@ const getLevelIncrement = (startLevel, level, lines, prevLines) => {
   return lines - prevLines >= 9 ? 1 : 0;
 };
 
-module.exports = { show, getScoreIncrement, getLevelIncrement };
+const getDelayFrames = level => {
+  if (level >= 0 && level <= 8) {
+    return 48 - 5 * level;
+  }
+  if (level === 9) {
+    return 6;
+  }
+  if (level >= 10 && level <= 12) {
+    return 5;
+  }
+  if (level >= 13 && level <= 15) {
+    return 4;
+  }
+  if (level >= 16 && level <= 18) {
+    return 3;
+  }
+  if (level > 19 && level <= 28) {
+    return 2;
+  }
+  return 1;
+};
+
+module.exports = { show, getScoreIncrement, getLevelIncrement, getDelayFrames };
