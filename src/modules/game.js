@@ -12,16 +12,13 @@ const {
 /*
  * Define variables
  */
-const scale = 1; // seconds
-const speed = 5; // squares per <scale> seconds
-let delay = scale / speed; // sec after which a figure drops by one square below
+
 let currentTetromino = null;
 let isPressedDownArrow = false;
 let prevDelay = 0;
 let startLevel = 0;
 let level = 0;
 let score = 0;
-let prevLines = 0;
 let lines = 0;
 
 let delayFrames = 0;
@@ -34,11 +31,11 @@ function getTetromino() {
 }
 
 function run() {
+  init();
+  getTetromino();
   level = startLevel;
   delayFrames = getDelayFrames(level);
   show(score, lines, level);
-  init();
-  getTetromino();
   let currentFrames = 0;
 
   const repaint = () => {
@@ -54,15 +51,16 @@ function run() {
         if (fullLines.length) {
           burnLines(fullLines);
           score += getScoreIncrement(fullLines.length, level);
+          const eps = getLevelIncrement(
+            startLevel,
+            level,
+            lines,
+            fullLines.length
+          );
           lines += fullLines.length;
-          const eps = getLevelIncrement(startLevel, level, lines, prevLines);
           if (eps) {
             level += eps;
-            const nextDelayFrame = getDelayFrames(level);
-            if (nextDelayFrame !== delayFrames) {
-              prevLines = lines;
-            }
-            delayFrames = nextDelayFrame;
+            delayFrames = getDelayFrames(level);
           }
           show(score, lines, level);
         }
@@ -147,10 +145,8 @@ function init() {
     }
     if (event.code === 'ArrowDown') {
       if (!isPressedDownArrow) {
-        prevDelay = delay;
         prevDelayFrames = delayFrames;
         delayFrames = 3;
-        delay = 0.05;
         isPressedDownArrow = true;
       }
     }
@@ -163,7 +159,6 @@ function init() {
   });
   document.addEventListener('keyup', event => {
     if (event.code === 'ArrowDown' && isPressedDownArrow) {
-      delay = prevDelay;
       delayFrames = prevDelayFrames;
       isPressedDownArrow = false;
     }

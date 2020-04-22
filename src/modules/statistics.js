@@ -9,13 +9,15 @@ const show = (score, lines, level) => {
 const getScoreIncrement = (numberOfBurnedLines, level) =>
   SCORE_INCREMENTS[numberOfBurnedLines - 1] * (level + 1);
 
-const getLevelIncrement = (startLevel, level, lines, prevLines) => {
+const getLevelIncrement = (startLevel, level, lines, increment) => {
   if (startLevel === level) {
     const bound1 = 10 * (startLevel + 1);
     const bound2 = Math.max(100, startLevel * 10 - 50);
-    return lines >= Math.min(bound1, bound2) ? 1 : 0;
+    return lines + increment >= Math.min(bound1, bound2) ? 1 : 0;
   }
-  return lines - prevLines >= 9 ? 1 : 0;
+  const newLines = (lines + increment) % 10;
+  lines = lines % 10;
+  return lines > newLines ? 1 : 0;
 };
 
 const getDelayFrames = level => {
