@@ -2,6 +2,7 @@ const constants = require('./constants');
 const gameBoard = require('./game-board');
 const { tetrominoes } = require('./tetromino');
 const { getColorOfSquare } = require('./square');
+const { show, getScoreIncrement, getLevelIncrement } = require('./statistics');
 
 /*
  * Define variables
@@ -12,6 +13,11 @@ let delay = scale / speed; // sec after which a figure drops by one square below
 let currentTetromino = null;
 let isPressedDownArrow = false;
 let prevDelay = 0;
+let startLevel = 0;
+let level = 0;
+let score = 0;
+let prevLines = 0;
+let lines = 0;
 
 function getTetromino() {
   const i = Math.round(Math.random() * 6);
@@ -20,6 +26,7 @@ function getTetromino() {
 }
 
 function run() {
+  level = startLevel;
   init();
   getTetromino();
   let prevTimestamp = Date.now(); // milliseconds
@@ -37,6 +44,14 @@ function run() {
         const fullLines = gameBoard.getFullLines();
         if (fullLines.length) {
           burnLines(fullLines);
+          score += getScoreIncrement(fullLines.length, level);
+          lines += fullLines.length;
+          const eps = getLevelIncrement(startLevel, level, lines, prevLines);
+          if (eps) {
+            prevLines = lines;
+            level += eps;
+          }
+          show(score, lines, level);
         }
         // Initiate dropping new tetromino
         getTetromino();

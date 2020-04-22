@@ -12,14 +12,40 @@ const TETROMINOS = { I: 0, O: 1, T: 2, L: 3, J: 4, Z: 5, S: 6 };
  * and by 1200 points, if we have the tetris, i.e. the number of the destroyed lines
  * equals to 4.
  *
- * @type {{TETRIS_INCREMENT: number, SIMPLE_INCREMENT: number}}
  */
-const SCORE_INCREMENTS = {
-  ONE_LINE_INCREMENT: 40,
-  TWO_LINE_INCREMENT: 100,
-  THREE_LINE_INCREMENT: 300,
-  TETRIS_INCREMENT: 1200
-};
+const SCORE_INCREMENTS = [40, 100, 300, 1200];
+
+const LEVEL_THRESHOLDS = [
+  10,
+  20,
+  30,
+  40,
+  50,
+  60,
+  70,
+  80,
+  90,
+  100,
+  100,
+  100,
+  100,
+  100,
+  100,
+  100,
+  110,
+  120,
+  130,
+  140,
+  150,
+  160,
+  170,
+  180,
+  190,
+  200,
+  200,
+  200,
+  200
+];
 
 /**
  * Define size of the game field
@@ -55,5 +81,6 @@ module.exports = {
   GAME_BOARD_COLOR,
   RED,
   BLUE,
-  PURPLE
+  PURPLE,
+  LEVEL_THRESHOLDS
 };
