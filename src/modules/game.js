@@ -2,6 +2,7 @@ const constants = require('./constants');
 const gameBoard = require('./game-board');
 const { tetrominoes } = require('./tetromino');
 const { getColorOfSquare } = require('./square');
+const { renderTetromino } = require('./preview-canvas');
 const {
   show,
   getScoreIncrement,
@@ -14,8 +15,8 @@ const {
  */
 
 let currentTetromino = null;
+let nextTetromino = null;
 let isPressedDownArrow = false;
-let prevDelay = 0;
 let startLevel = 0;
 let level = 0;
 let score = 0;
@@ -26,13 +27,16 @@ let prevDelayFrames = 0;
 
 function getTetromino() {
   const i = Math.round(Math.random() * 6);
-  currentTetromino = tetrominoes[i];
-  currentTetromino.draw();
+  return tetrominoes[i];
 }
 
 function run() {
   init();
-  getTetromino();
+  currentTetromino = getTetromino();
+  currentTetromino.draw();
+  nextTetromino = getTetromino();
+  renderTetromino(nextTetromino);
+
   level = startLevel;
   delayFrames = getDelayFrames(level);
   show(score, lines, level);
@@ -65,7 +69,10 @@ function run() {
           show(score, lines, level);
         }
         // Initiate dropping new tetromino
-        getTetromino();
+        currentTetromino = nextTetromino;
+        currentTetromino.draw();
+        nextTetromino = getTetromino();
+        renderTetromino(nextTetromino);
       }
     }
     currentFrames++;

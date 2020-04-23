@@ -19,11 +19,16 @@ main {
   color: white;
 }
 
-canvas {
+#canvas {
   width: 300px;
   height: 600px;
   border: 2px solid white;
   image-rendering: pixelated;
+}
+
+#preview-canvas {
+  width: 150px;
+  height: 120px;
 }
 
 aside {
@@ -59,8 +64,8 @@ aside.vertical-order {
 }
 
 .tile {
-  width: 100px;
-  height: 100px;
-  background-color: black;
+  width: 150px;
+  height: 120px;
+  /*background-color: black;*/
   border: 2px solid white;
 }

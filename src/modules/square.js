@@ -29,8 +29,20 @@ function getColorOfSquare(x, y) {
  * values of the variable y are defined as follows: 0 <= y <= constants.SIZE_FIELD.HEIGHT.
  * @param {String} innerColor - The main color for the body of a square in the hex code
  * @param {String[]} borderColors - The border colors for the body of a square in the hex code
+ * @param {Function} drawPixel - The function for pixel drawing on a canvas
+ * @param {Function} paintRect
+ * @param shift
  */
-function paintSquare(x, y, innerColor, borderColors) {
+function paintSquare(
+  x,
+  y,
+  innerColor,
+  borderColors,
+  drawPixel = canvas.drawPixel,
+  paintRect = canvas.paintRect,
+  // eslint-disable-next-line no-unused-vars
+  shift = { x: 0, y: 0 }
+) {
   const borderSize = borderColors.length;
 
   /*
@@ -38,25 +50,25 @@ function paintSquare(x, y, innerColor, borderColors) {
    * Outer layer has a level 0.
    */
   for (let layer = 0; layer < borderSize; layer++) {
-    let X = x * constants.LINE_PIXELS_IN_SQUARE + layer;
-    let Y = y * constants.LINE_PIXELS_IN_SQUARE + layer;
+    let X = x * constants.LINE_PIXELS_IN_SQUARE + layer + shift.x;
+    let Y = y * constants.LINE_PIXELS_IN_SQUARE + layer + shift.y;
     const color = borderColors[layer];
     const size = constants.LINE_PIXELS_IN_SQUARE - 2 * layer;
     for (let i = 0; i <= 2 * size - 1; i++) {
-      canvas.drawPixel(X, Y, color);
-      if (X < (x + 1) * constants.LINE_PIXELS_IN_SQUARE - layer - 1) {
-        canvas.drawPixel(X, Y + size - 1, color);
+      drawPixel(X, Y, color);
+      if (X < (x + 1) * constants.LINE_PIXELS_IN_SQUARE - layer - 1 + shift.x) {
+        drawPixel(X, Y + size - 1, color);
         X++;
       } else {
-        canvas.drawPixel(X - size + 1, Y, color);
+        drawPixel(X - size + 1, Y, color);
         Y++;
       }
     }
   }
-  const x1 = x * constants.LINE_PIXELS_IN_SQUARE + borderSize;
-  const y1 = y * constants.LINE_PIXELS_IN_SQUARE + borderSize;
+  const x1 = x * constants.LINE_PIXELS_IN_SQUARE + borderSize + shift.x;
+  const y1 = y * constants.LINE_PIXELS_IN_SQUARE + borderSize + shift.y;
   const eps = constants.LINE_PIXELS_IN_SQUARE - 2 * borderSize - 1;
-  canvas.paintRect(x1, y1, x1 + eps, y1 + eps, innerColor);
+  paintRect(x1, y1, x1 + eps, y1 + eps, innerColor);
 }
 
 /**
