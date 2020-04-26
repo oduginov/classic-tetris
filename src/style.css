@@ -48,6 +48,10 @@ li {
 }
 
 
+#play {
+  display: none;
+}
+
 /* CSS-styles for classes */
 
 .control-panel {
@@ -66,6 +70,5 @@ aside.vertical-order {
 .tile {
   width: 150px;
   height: 120px;
-  /*background-color: black;*/
   border: 2px solid white;
 }

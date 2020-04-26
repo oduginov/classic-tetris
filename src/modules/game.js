@@ -14,6 +14,10 @@ const {
  * Define variables
  */
 
+const control = document.querySelector('.control');
+const stopButton = document.getElementById('stop');
+const startButton = document.getElementById('play');
+
 let currentTetromino = null;
 let nextTetromino = null;
 let isPressedDownArrow = false;
@@ -21,6 +25,7 @@ let startLevel = 0;
 let level = 0;
 let score = 0;
 let lines = 0;
+let isStoppedGame = false;
 
 let delayFrames = 0;
 let prevDelayFrames = 0;
@@ -144,32 +149,53 @@ function move() {
 
 function init() {
   document.addEventListener('keydown', event => {
-    if (event.code === 'ArrowLeft') {
+    if (event.code === 'ArrowLeft' && !isStoppedGame) {
       currentTetromino.moveLeft();
     }
-    if (event.code === 'ArrowRight') {
+    if (event.code === 'ArrowRight' && !isStoppedGame) {
       currentTetromino.moveRight();
     }
-    if (event.code === 'ArrowDown') {
+    if (event.code === 'ArrowDown' && !isStoppedGame) {
       if (!isPressedDownArrow) {
         prevDelayFrames = delayFrames;
         delayFrames = 3;
         isPressedDownArrow = true;
       }
     }
-    if (event.code === 'KeyX' && currentTetromino.rotate) {
+    if (event.code === 'KeyX' && currentTetromino.rotate && !isStoppedGame) {
       currentTetromino.rotate(true);
     }
-    if (event.code === 'KeyZ' && currentTetromino.rotate) {
+    if (event.code === 'KeyZ' && currentTetromino.rotate && !isStoppedGame) {
       currentTetromino.rotate(false);
+    }
+    if (event.code === 'KeyS') {
+      stopStartGame();
     }
   });
   document.addEventListener('keyup', event => {
-    if (event.code === 'ArrowDown' && isPressedDownArrow) {
+    if (event.code === 'ArrowDown' && isPressedDownArrow && !isStoppedGame) {
       delayFrames = prevDelayFrames;
       isPressedDownArrow = false;
     }
   });
+  document.addEventListener('click', stopStartGame);
 }
+
+const stopStartGame = event => {
+  if (!event || event.target.classList.contains('control')) {
+    if (delayFrames === Infinity) {
+      delayFrames = prevDelayFrames;
+      isStoppedGame = false;
+      stopButton.style.display = 'inline-block';
+      startButton.style.display = 'none';
+    } else {
+      prevDelayFrames = delayFrames;
+      delayFrames = Infinity;
+      isStoppedGame = true;
+      startButton.style.display = 'inline-block';
+      stopButton.style.display = 'none';
+    }
+  }
+};
 
 module.exports = { run };
