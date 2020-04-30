@@ -108,4 +108,8 @@ function paintRect(x1, y1, x2, y2, color) {
   context.fillRect(x1, y1, Math.abs(x2 - x1 + 1), Math.abs(y2 - y1 + 1));
 }
 
-module.exports = { renderTetromino };
+function clearCanvas() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+module.exports = { renderTetromino, clearCanvas };

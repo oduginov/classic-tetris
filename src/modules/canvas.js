@@ -52,9 +52,14 @@ function rgbaToHex([r, g, b]) {
     .join('')}`;
 }
 
+function clearCanvas() {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 module.exports = {
   canvasSize: { rows, cols },
   drawPixel,
   paintRect,
-  getColorOfPixel
+  getColorOfPixel,
+  clearCanvas
 };

@@ -1,5 +1,6 @@
 const constants = require('./constants');
 const square = require('./square');
+const canvas = require('./canvas');
 
 const bitmap = new Array(constants.SIZE_FIELD.HEIGHT).fill(false);
 bitmap.forEach((item, index, baseArray) => {
@@ -41,6 +42,19 @@ const getFullLines = () => {
 
 const isEmptyLine = line => bitmap[line].every(s => !s);
 
+const isFullGameBoard = () => {
+  return bitmap[1].some(item => item);
+};
+
+const clearGameBoard = () => {
+  canvas.clearCanvas();
+  for (let i = 0; i < constants.SIZE_FIELD.HEIGHT; i++) {
+    for (let j = 0; j < constants.SIZE_FIELD.WIDTH; j++) {
+      bitmap[i][j] = false;
+    }
+  }
+};
+
 module.exports = {
   drawTetromino,
   eraseTetromino,
@@ -50,5 +64,7 @@ module.exports = {
   drawSquare,
   isEmptyLine,
   isSquareFree,
-  takeSquare
+  takeSquare,
+  isFullGameBoard,
+  clearGameBoard
 };

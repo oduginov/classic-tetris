@@ -1,3 +1,4 @@
-const controller = require("./modules/controller");
+const { showIntroWindow } = require('./modules/modal-window');
+const { run } = require('./modules/game');
 
-controller.startGame();
+showIntroWindow(run);

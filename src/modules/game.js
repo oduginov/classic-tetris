@@ -2,7 +2,8 @@ const constants = require('./constants');
 const gameBoard = require('./game-board');
 const { tetrominoes } = require('./tetromino');
 const { getColorOfSquare } = require('./square');
-const { renderTetromino } = require('./preview-canvas');
+const { renderTetromino, clearCanvas } = require('./preview-canvas');
+const { showSettingsWindow, showIntroWindow } = require('./modal-window');
 const {
   show,
   getScoreIncrement,
@@ -14,9 +15,9 @@ const {
  * Define variables
  */
 
-const control = document.querySelector('.control');
 const stopButton = document.getElementById('stop');
 const startButton = document.getElementById('play');
+const settings = document.getElementById('control');
 
 let currentTetromino = null;
 let nextTetromino = null;
@@ -26,6 +27,7 @@ let level = 0;
 let score = 0;
 let lines = 0;
 let isStoppedGame = false;
+let isFirstRunningGame = true;
 
 let delayFrames = 0;
 let prevDelayFrames = 0;
@@ -35,8 +37,13 @@ function getTetromino() {
   return tetrominoes[i];
 }
 
-function run() {
-  init();
+function run(userLevel) {
+  isStoppedGame = false;
+  startLevel = userLevel;
+  if (isFirstRunningGame) {
+    init();
+    isFirstRunningGame = false;
+  }
   currentTetromino = getTetromino();
   currentTetromino.draw();
   nextTetromino = getTetromino();
@@ -54,6 +61,17 @@ function run() {
         // Stop dropping the current tetromino, save its state and
         // reset the coordinates for the squares of the current tetromino
         currentTetromino.saveState();
+        if (gameBoard.isFullGameBoard()) {
+          isStoppedGame = true;
+          clearCanvas();
+          gameBoard.clearGameBoard();
+          level = 0;
+          score = 0;
+          lines = 0;
+          showIntroWindow(run);
+          return;
+        }
+
         currentTetromino.reset();
 
         const fullLines = gameBoard.getFullLines();
@@ -179,7 +197,15 @@ function init() {
     }
   });
   document.addEventListener('click', stopStartGame);
+  settings.addEventListener('click', showMenu);
 }
+
+const showMenu = () => {
+  if (!isStoppedGame) {
+    stopStartGame();
+  }
+  showSettingsWindow();
+};
 
 const stopStartGame = event => {
   if (!event || event.target.classList.contains('control')) {
