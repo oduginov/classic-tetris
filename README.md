@@ -1,11 +1,11 @@
 # Classic tetris
 
-## Scoring
+[oduginov.github.io/classic-tetris](https://oduginov.github.io/classic-tetris/)
 
-[Original Nintendo scoring system](https://tetris.fandom.com/wiki/Scoring) is implemented.
-Distribution of points depends on the level `n` and it is defined as follows: `40 * (n + 1)` 
-for one burned line, `100 * (n + 1)` for two burned lines, `300 * (n + 1)` for three burned 
-lines and `1200 * (n + 1)` for the tetris, i.e four burned lines.
+## Description
+
+Desktop version of the classic tetris. Physics and rules of the game follow the classic tetris 
+([Original Nintendo Scoring System](https://tetris.fandom.com/wiki/Scoring), [A-type speed control](https://tetris.fandom.com/wiki/Tetris_(NES,_Nintendo))) 
 
 ## Development
 1. Install dependencies
