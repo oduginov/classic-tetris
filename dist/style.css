@@ -1,0 +1,113 @@
+* {
+  font-family: Consolas, monospace;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* CSS-styles for elements */
+
+body {
+  background-color: darkslategray;
+}
+
+main {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+  z-index: 2000;
+  display: flex;
+  width: 90vh; /*700px;*/
+  height: 82vh; /* 600px;*/
+  /*margin: 20px auto;*/
+  background-color: darkslategray;
+  color: white;
+}
+
+#canvas {
+  width: 43vh; /* 300px; */
+  height: 82vh; /* 600px; */
+  border: 2px solid white;
+  image-rendering: pixelated;
+}
+
+#preview-canvas {
+  width: 20vh; /* 150px; */
+  height: 16vh; /* 120px; */
+}
+
+aside {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+}
+
+ul {
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  list-style-type: none;
+}
+
+#play {
+  display: none;
+}
+
+button {
+  display: block;
+  border: none;
+  padding: 0.3em 0.6em;
+  background: black;
+  color: #fff;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+
+/* CSS-styles for classes */
+
+.control-panel {
+  display: flex;
+  justify-content: space-between;
+  width: 75px;
+  cursor: pointer;
+}
+
+aside.vertical-order {
+  width: 200px;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tile {
+  width: 20vh; /* 150px; */
+  height: 16vh; /* 120px; */
+  border: 2px solid white;
+}
+
+.modal-window {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 40%;
+  max-width: 630px;
+  min-width: 320px;
+  background-color: gray;
+  padding: 20px;
+  z-index: 2000;
+  visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -ms-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
