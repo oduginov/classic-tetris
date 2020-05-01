@@ -1,24 +1,22 @@
-const constants = require('./constants');
+const { SIZE_FIELD } = require('./constants');
 const gameBoard = require('./game-board');
-const { tetrominoes } = require('./tetromino');
+const { tetrominos } = require('./tetromino');
 const { getColorOfSquare } = require('./square');
 const { renderTetromino, clearCanvas } = require('./preview-canvas');
-const { showSettingsWindow, showIntroWindow } = require('./modal-window');
+const { showSettingsWindow, showEndGameWindow } = require('./modal-window');
 const {
   show,
   getScoreIncrement,
   getLevelIncrement,
   getDelayFrames
-} = require('./statistics');
+} = require('./parameters');
 
 /*
  * Define variables
  */
-
 const stopButton = document.getElementById('stop');
 const startButton = document.getElementById('play');
 const settings = document.getElementById('control');
-
 let currentTetromino = null;
 let nextTetromino = null;
 let isPressedDownArrow = false;
@@ -28,18 +26,35 @@ let score = 0;
 let lines = 0;
 let isStoppedGame = false;
 let isFirstRunningGame = true;
-
 let delayFrames = 0;
 let prevDelayFrames = 0;
 
+/**
+ * Generate a random tetromino.
+ *
+ * @returns {object} Object of the type <Tetromino>
+ */
 function getTetromino() {
   const i = Math.round(Math.random() * 6);
-  return tetrominoes[i];
+  return tetrominos[i];
 }
 
+function updateParameters(levelIncr, delayFrameVar, lineIncr) {
+  level += levelIncr;
+  delayFrames = delayFrameVar;
+  lines += lineIncr;
+  show(score, lines, level);
+}
+
+/**
+ * Run the game
+ *
+ * @param userLevel - The level at the beginning of the game.
+ */
 function run(userLevel) {
   isStoppedGame = false;
   startLevel = userLevel;
+  level = startLevel;
   if (isFirstRunningGame) {
     init();
     isFirstRunningGame = false;
@@ -48,32 +63,25 @@ function run(userLevel) {
   currentTetromino.draw();
   nextTetromino = getTetromino();
   renderTetromino(nextTetromino);
-
-  level = startLevel;
-  delayFrames = getDelayFrames(level);
-  show(score, lines, level);
+  updateParameters(0, getDelayFrames(level), 0);
   let currentFrames = 0;
 
   const repaint = () => {
     if (currentFrames >= delayFrames) {
       currentFrames = 0;
       if (!move()) {
-        // Stop dropping the current tetromino, save its state and
-        // reset the coordinates for the squares of the current tetromino
         currentTetromino.saveState();
         if (gameBoard.isFullGameBoard()) {
           isStoppedGame = true;
           clearCanvas();
           gameBoard.clearGameBoard();
+          showEndGameWindow(score, run);
           level = 0;
           score = 0;
           lines = 0;
-          showIntroWindow(run);
           return;
         }
-
         currentTetromino.reset();
-
         const fullLines = gameBoard.getFullLines();
         if (fullLines.length) {
           burnLines(fullLines);
@@ -84,12 +92,7 @@ function run(userLevel) {
             lines,
             fullLines.length
           );
-          lines += fullLines.length;
-          if (eps) {
-            level += eps;
-            delayFrames = getDelayFrames(level);
-          }
-          show(score, lines, level);
+          updateParameters(eps, getDelayFrames(level), fullLines.length);
         }
         // Initiate dropping new tetromino
         currentTetromino = nextTetromino;
@@ -105,24 +108,24 @@ function run(userLevel) {
   requestAnimationFrame(repaint);
 }
 
+/**
+ * Animation of line burning.
+ *
+ * @param fullLines - The array of row indices filled by tetrominos.
+ */
 function burnLines(fullLines) {
   if (isPressedDownArrow) {
     delayFrames = prevDelayFrames;
     isPressedDownArrow = false;
   }
-
-  let indexBurnedSquare = Math.floor(constants.SIZE_FIELD.WIDTH / 2) - 1;
+  let indexBurnedSquare = Math.floor(SIZE_FIELD.WIDTH / 2) - 1;
   let currentFrames = 0;
-
   const repaint = () => {
     if (currentFrames >= 2) {
       currentFrames = 0;
       fullLines.forEach(line => {
-        gameBoard.eraseSquare(indexBurnedSquare, line);
-        gameBoard.eraseSquare(
-          constants.SIZE_FIELD.WIDTH - indexBurnedSquare - 1,
-          line
-        );
+        gameBoard.deleteSquare(indexBurnedSquare, line);
+        gameBoard.deleteSquare(SIZE_FIELD.WIDTH - indexBurnedSquare - 1, line);
       });
       indexBurnedSquare--;
     }
@@ -137,15 +140,20 @@ function burnLines(fullLines) {
   requestAnimationFrame(repaint);
 }
 
+/**
+ * Animation of line dropping after burning of full lines.
+ *
+ * @param fullLines - The array of indices of rows that is filled by tetrominos.
+ */
 function dropLines(fullLines) {
   const repaint = () => {
     let i = fullLines.shift();
     while (i >= 1 && !gameBoard.isEmptyLine(i - 1)) {
-      for (let j = 0; j < constants.SIZE_FIELD.WIDTH; j++) {
+      for (let j = 0; j < SIZE_FIELD.WIDTH; j++) {
         const color = getColorOfSquare(j, i - 1);
         if (color) {
-          gameBoard.drawSquare(j, i, color.innerColor, color.borderColors);
-          gameBoard.eraseSquare(j, i - 1);
+          gameBoard.putSquare(j, i, color.innerColor, color.borderColors);
+          gameBoard.deleteSquare(j, i - 1);
         }
       }
       i--;
@@ -157,6 +165,12 @@ function dropLines(fullLines) {
   requestAnimationFrame(repaint);
 }
 
+/**
+ * Move the current tetromino by one line down.
+ *
+ * @returns {boolean} True, if we can move the current tetromino;
+ * false, otherwise.
+ */
 function move() {
   const updatedSquares = currentTetromino.squares.map(square => ({
     x: square.x,
@@ -165,6 +179,9 @@ function move() {
   return currentTetromino.move(updatedSquares);
 }
 
+/**
+ * Add event listeners
+ */
 function init() {
   document.addEventListener('keydown', event => {
     if (event.code === 'ArrowLeft' && !isStoppedGame) {

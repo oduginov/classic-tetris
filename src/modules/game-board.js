@@ -1,36 +1,87 @@
-const constants = require('./constants');
-const square = require('./square');
-const canvas = require('./canvas');
+const { paintSquare, eraseSquare } = require('./square');
+const { SIZE_FIELD } = require('./constants');
+const { clearCanvas } = require('./canvas');
 
-const bitmap = new Array(constants.SIZE_FIELD.HEIGHT).fill(false);
+// Bitmap of the game board
+const bitmap = new Array(SIZE_FIELD.HEIGHT).fill(false);
+
+// Initialize of the bitmap
 bitmap.forEach((item, index, baseArray) => {
-  baseArray[index] = new Array(constants.SIZE_FIELD.WIDTH);
+  baseArray[index] = new Array(SIZE_FIELD.WIDTH);
   baseArray[index].fill(false);
 });
 
-const isSquareFree = (x, y) => !bitmap[y][x];
+/**
+ * Check whether square (x, y) is free?
+ *
+ * @param {number} x - The first coordinate of the square on the game board.
+ * @param {number} y - The second coordinate of the square on the game board.
+ * @returns {boolean} - True, if the square is free, and false, otherwise.
+ */
+function isSquareFree(x, y) {
+  return !bitmap[y][x];
+}
 
-const drawTetromino = (squares, innerColor, borderColors) =>
-  squares.forEach(s => square.paintSquare(s.x, s.y, innerColor, borderColors));
+/**
+ * Draw squares of a tetromino on the game board.
+ *
+ * @param squares - The array of the tetromino's squares.
+ * @param innerColor - The color of inner area of the square.
+ * @param borderColors - The array of the colors for the square border.
+ */
+function drawTetromino(squares, innerColor, borderColors) {
+  squares.forEach(s => paintSquare(s.x, s.y, innerColor, borderColors));
+}
 
-const drawSquare = (x, y, innerColor, borderColors) => {
-  square.paintSquare(x, y, innerColor, borderColors);
+/**
+ * Put a square on the game board.
+ *
+ * @param x - The first coordinate on the game board.
+ * @param y - The second coordinate on the game board.
+ * @param innerColor - The color of inner area of the square.
+ * @param borderColors - The array of the colors for the square border.
+ */
+function putSquare(x, y, innerColor, borderColors) {
+  paintSquare(x, y, innerColor, borderColors);
   takeSquare(x, y);
-};
+}
 
-const eraseTetromino = tetromino =>
-  tetromino.forEach(s => square.eraseSquare(s.x, s.y));
+/**
+ * Erase of the tetromino squares on the game board.
+ *
+ * @param tetromino - Tetromino object (see, please, <./tetromino.js>)
+ */
+function eraseTetromino(tetromino) {
+  tetromino.forEach(s => eraseSquare(s.x, s.y));
+}
 
-const eraseSquare = (x, y) => {
-  square.eraseSquare(x, y);
+/**
+ * Delete a square from the game board and bitmap.
+ *
+ * @param x - The first coordinate of the deleted square on the game board.
+ * @param y - The second coordinate of the deleted square on the game board.
+ */
+function deleteSquare(x, y) {
+  eraseSquare(x, y);
   bitmap[y][x] = false;
-};
+}
 
-const takeSquare = (x, y) => {
+/**
+ * Fix a square on the game board.
+ *
+ * @param x - The first coordinate of the deleted square on the game board.
+ * @param y - The second coordinate of the deleted square on the game board.
+ */
+function takeSquare(x, y) {
   bitmap[y][x] = true;
-};
+}
 
-const getFullLines = () => {
+/**
+ * Get an array of row indices (on the game board) filled by tetrominos.
+ *
+ * @returns {[]} - The array of indices.
+ */
+function getFullLines() {
   const fullLines = [];
   bitmap.forEach((row, index) => {
     if (row.every(element => element)) {
@@ -38,30 +89,46 @@ const getFullLines = () => {
     }
   });
   return fullLines;
-};
+}
 
-const isEmptyLine = line => bitmap[line].every(s => !s);
+/**
+ * Check whether the row with the index <row> is filled by tetrominos.
+ *
+ * @param row - The index of the line on the game board.
+ * @returns {boolean}
+ */
+function isEmptyLine(row) {
+  return bitmap[row].every(s => !s);
+}
 
-const isFullGameBoard = () => {
+/**
+ * Check whether the last by one row has a square of a tetromino. If it is, then
+ * we finish current game.
+ *
+ * @returns {boolean}
+ */
+function isFullGameBoard() {
   return bitmap[1].some(item => item);
-};
+}
 
-const clearGameBoard = () => {
-  canvas.clearCanvas();
-  for (let i = 0; i < constants.SIZE_FIELD.HEIGHT; i++) {
-    for (let j = 0; j < constants.SIZE_FIELD.WIDTH; j++) {
+/**
+ * Clear the game board and bitmap.
+ */
+function clearGameBoard() {
+  clearCanvas();
+  for (let i = 0; i < SIZE_FIELD.HEIGHT; i++) {
+    for (let j = 0; j < SIZE_FIELD.WIDTH; j++) {
       bitmap[i][j] = false;
     }
   }
-};
+}
 
 module.exports = {
   drawTetromino,
   eraseTetromino,
-  bitmap,
   getFullLines,
-  eraseSquare,
-  drawSquare,
+  deleteSquare,
+  putSquare,
   isEmptyLine,
   isSquareFree,
   takeSquare,

@@ -15,7 +15,7 @@ const context = canvas.getContext('2d');
 
 canvas.style.backgroundColor = GAME_BOARD_COLOR;
 
-const renderTetromino = tetromino => {
+function renderTetromino(tetromino) {
   const type = tetromino.type;
   let squares;
   let shiftX = 0;
@@ -96,7 +96,7 @@ const renderTetromino = tetromino => {
       { x: shiftX, y: shiftY }
     )
   );
-};
+}
 
 function drawPixel(x, y, color) {
   context.fillStyle = color;

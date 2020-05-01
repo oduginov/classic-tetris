@@ -1,16 +1,18 @@
 /**
  * Enumerate all tetriminoes and assign the number for each tile
  *
- * @type {{S: number, T: number, I: number, J: number, Z: number, L: number, O: number}}
+ * @type {{S: number, T: number, I: number, J: number, Z: number,
+ * L: number, O: number}}
  */
 const TETROMINOS = { I: 0, O: 1, T: 2, L: 3, J: 4, Z: 5, S: 6 };
 
 /**
  * Define increments of the score. According to the rule
- * the classic tetris, we increment the score by 40, 100, 300 points, if the
- * number of the destroyed horizontal lines is exactly 1,2 and 3, respectively,
- * and by 1200 points, if we have the tetris, i.e. the number of the destroyed lines
- * equals to 4.
+ * the classic tetris, we increment the score by 40 * (level+1),
+ * 100 * (level + 1), 300 * (level + 1) points, if the number of
+ * the destroyed horizontal lines is exactly 1,2 and 3, respectively,
+ * and by 1200 * (level + 1) points, if we have the tetris, i.e. the
+ * number of the destroyed lines equals to 4.
  *
  */
 const SCORE_INCREMENTS = [40, 100, 300, 1200];

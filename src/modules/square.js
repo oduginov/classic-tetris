@@ -7,6 +7,13 @@ function isOnGameBoard(x, y) {
   return isByX && isByY;
 }
 
+/**
+ * Get color of square on the game board.
+ *
+ * @param x - The first coordinate of the square on the game board.
+ * @param y - The second coordinate of the square on the game board.
+ * @returns {*}
+ */
 function getColorOfSquare(x, y) {
   const X = x * constants.LINE_PIXELS_IN_SQUARE;
   const Y = y * constants.LINE_PIXELS_IN_SQUARE;
@@ -40,7 +47,6 @@ function paintSquare(
   borderColors,
   drawPixel = canvas.drawPixel,
   paintRect = canvas.paintRect,
-  // eslint-disable-next-line no-unused-vars
   shift = { x: 0, y: 0 }
 ) {
   const borderSize = borderColors.length;
@@ -73,15 +79,11 @@ function paintSquare(
 
 /**
  * Erase a square on the game board with the specified board coordinates
- * @param x - The first board coordinate of the erased square
- * @param y - The second board coordinate of the erased square
+ * @param x - The first board coordinate of the erased square.
+ * @param y - The second board coordinate of the erased square.
  */
 function eraseSquare(x, y) {
   paintSquare(x, y, constants.GAME_BOARD_COLOR, []);
 }
 
-/**
- * Model square of a tetromino.
- * @type {{paintSquare: *}}
- */
 module.exports = { paintSquare, eraseSquare, getColorOfSquare, isOnGameBoard };

@@ -3,13 +3,32 @@ const content = document.getElementById('content');
 const modalWindow = document.querySelector('.modal-window');
 
 const keyboardShortcuts = [
-  { key: 's', action: 'pause/unpause game' },
-  { key: 'z', action: 'left rotate of a tile' },
-  { key: 'x', action: 'right rotate of a tile' },
+  { key: 's', action: 'pause/unpause' },
+  { key: 'z', action: 'left rotation of a tile' },
+  { key: 'x', action: 'right rotation of a tile' },
   { key: 'left arrow', action: 'left shift of a tile' },
   { key: 'right arrow', action: 'right shift of a tile' },
   { key: 'down arrow', action: 'speed-up' }
 ];
+
+function showEndGameWindow(score, run) {
+  content.innerHTML = '';
+  topic.textContent = 'Tetris Game';
+  let span = document.createElement('span');
+  span.textContent = 'Score: ';
+  content.appendChild(span);
+  span = document.createElement('span');
+  span.textContent = score;
+  span.style.color = 'white';
+  content.appendChild(span);
+  modalWindow.style.visibility = 'visible';
+  const button = document.createElement('button');
+  button.textContent = 'New game';
+  button.addEventListener('click', () => {
+    showIntroWindow(run);
+  });
+  content.appendChild(button);
+}
 
 function showIntroWindow(run) {
   content.innerHTML = '';
@@ -63,4 +82,4 @@ function showSettingsWindow() {
   modalWindow.style.visibility = 'visible';
 }
 
-module.exports = { showIntroWindow, showSettingsWindow };
+module.exports = { showIntroWindow, showSettingsWindow, showEndGameWindow };

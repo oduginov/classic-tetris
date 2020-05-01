@@ -1,7 +1,23 @@
-const gameBoard = require('./game-board');
+const {
+  isSquareFree,
+  eraseTetromino,
+  takeSquare,
+  drawTetromino
+} = require('./game-board');
 const constants = require('./constants');
 const { isOnGameBoard } = require('./square');
 
+/**
+ * Constructor for the tetromino object.
+ *
+ * @param type - The type of tetromino (a number from 0 to 6).
+ * @param borderColors - The array of colors for the border of tetromino squares
+ * @param innerColor - The color for inner area of tetromino squares.
+ * @param squares - The array of objects with two properties --- coordinates of
+ * tetromino squares.
+ * @param reset - The function, which transform <squares> in the initial state.
+ * @constructor
+ */
 function Tetromino(type, borderColors, innerColor, squares, reset) {
   this.type = type;
   this.innerColor = innerColor;
@@ -11,41 +27,39 @@ function Tetromino(type, borderColors, innerColor, squares, reset) {
 }
 
 /**
+ * Move the current tetromino to new position.
  *
- * @param squares
+ * @param sq - New coordinates for squares of the tetromino.
  * @returns {boolean}
  */
-Tetromino.prototype.move = function move(squares) {
-  if (
-    squares.every(
-      s => isOnGameBoard(s.x, s.y) && gameBoard.isSquareFree(s.x, s.y)
-    )
-  ) {
-    gameBoard.eraseTetromino(this.squares);
-    this.squares = squares;
+Tetromino.prototype.move = function move(sq) {
+  if (sq.every(s => isOnGameBoard(s.x, s.y) && isSquareFree(s.x, s.y))) {
+    eraseTetromino(this.squares);
+    this.squares = sq;
     this.draw();
     return true;
   }
   return false;
 };
 
+/**
+ * Put squares of the tetromino on the bitmap of the game board.
+ */
 Tetromino.prototype.saveState = function saveState() {
-  this.squares.forEach(square => gameBoard.takeSquare(square.x, square.y));
-};
-
-Tetromino.prototype.draw = function draw() {
-  gameBoard.drawTetromino(
-    this.squares,
-    this.innerColor,
-    this.borderColors,
-    false
-  );
+  this.squares.forEach(square => takeSquare(square.x, square.y));
 };
 
 /**
+ * Render tetromino on the game board.
+ */
+Tetromino.prototype.draw = function draw() {
+  drawTetromino(this.squares, this.innerColor, this.borderColors, false);
+};
+
+/**
+ * Move the tetromino left.
  *
- * @param tetromino
- * @returns {boolean}
+ * @returns {boolean} - True, if we could move the tetromino; false, otherwise.
  */
 Tetromino.prototype.moveLeft = function moveLeft() {
   const updatedSquares = this.squares.map(square => ({
@@ -56,9 +70,9 @@ Tetromino.prototype.moveLeft = function moveLeft() {
 };
 
 /**
+ * Move the tetromino right.
  *
- * @param tetromino
- * @returns {boolean}
+ * @returns {boolean} - True, if we could move the tetromino; false, otherwise.
  */
 Tetromino.prototype.moveRight = function moveRight() {
   const updatedSquares = this.squares.map(square => ({
@@ -95,6 +109,12 @@ function rotateSquare(x0, y0, x1, y1, clockwise) {
   return { x, y };
 }
 
+/**
+ * Rotate the tetormino.
+ *
+ * @param clockwise - True, if ratation is in clockwise direction; false, otherwise.
+ * @returns {Tetromino} - The tetromino.
+ */
 Tetromino.prototype.rotate = function rotate(clockwise) {
   if (this.type !== constants.TETROMINOS.O) {
     const rotatedTetromino = this.squares.map(square => {
@@ -104,7 +124,7 @@ Tetromino.prototype.rotate = function rotate(clockwise) {
           : this.squares[1];
       return rotateSquare(center.x, center.y, square.x, square.y, clockwise);
     });
-    return this.move(rotatedTetromino);
+    this.move(rotatedTetromino);
   }
   return this;
 };
@@ -240,4 +260,4 @@ const Z = new Tetromino(
   }
 );
 
-module.exports = { tetrominoes: [I, J, L, O, S, T, Z] };
+module.exports = { tetrominos: [I, J, L, O, S, T, Z] };
